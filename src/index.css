@@ -1,0 +1,27 @@
+/* Limpieza de estilos por defecto de Vite */
+:root {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+/* BANNER CON GRÁFICA DE ANÁLISIS NUMÉRICO EN SVG */
+.banner-math {
+  background-color: #002b49 !important;
+  background-image: 
+    linear-gradient(135deg, rgba(0, 43, 73, 0.90) 0%, rgba(0, 70, 120, 0.90) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cpattern id='grid' width='30' height='30' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 30 0 L 0 0 0 30' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.06'/%3E%3C/pattern%3E%3ClinearGradient id='polyGrad' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%2338bdf8' stop-opacity='0.25'/%3E%3Cstop offset='100%25' stop-color='%2338bdf8' stop-opacity='0.0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grid)' /%3E%3Cline x1='0' y1='180' x2='1200' y2='180' stroke='%23ffffff' stroke-width='1.5' stroke-opacity='0.3' stroke-dasharray='4,4' /%3E%3Cpath d='M 250,180 Q 380,40 500,180 L 500,180 L 250,180 Z' fill='url(%23polyGrad)' /%3E%3Cpath d='M 0,220 C 120,250 180,110 280,70 C 380,30 450,230 550,220 C 680,210 720,50 850,90 C 950,120 1050,260 1200,140' fill='none' stroke='%2338bdf8' stroke-width='2.8' stroke-opacity='0.75' /%3E%3Cline x1='600' y1='250' x2='800' y2='30' stroke='%23f59e0b' stroke-width='1.8' stroke-opacity='0.6' stroke-dasharray='5,5' /%3E%3Ccircle cx='232' cy='180' r='5' fill='%23ef4444' fill-opacity='0.9' /%3E%3Ccircle cx='500' cy='180' r='5' fill='%23ef4444' fill-opacity='0.9' /%3E%3Ccircle cx='733' cy='105' r='4' fill='%23f59e0b' fill-opacity='0.9' /%3E%3C/svg%3E") !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* Ajuste visual para elementos activos en el Sidebar */
+.list-group-item.active {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  font-weight: 600;
+}
