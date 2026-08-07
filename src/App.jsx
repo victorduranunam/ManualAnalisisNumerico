@@ -24,7 +24,7 @@ function App() {
             </div>
             <div className="col-md-4 text-md-end d-none d-md-block">
               <span className="badge bg-warning text-dark px-3 py-2 fs-6 shadow-sm fw-bold">
-                PAPIME 112032
+                PAPIME PE103226
               </span>
             </div>
           </div>
@@ -43,7 +43,7 @@ function App() {
 
       {/* Footer */}
       <footer className="bg-dark text-white text-center py-3 mt-auto">
-        <small>© UNAM — Facultad de Ingeniería | Proyecto PAPIME 112032</small>
+        <small>© UNAM — Facultad de Ingeniería | Proyecto PAPIME PE103226</small>
       </footer>
     </div>
   );

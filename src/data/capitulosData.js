@@ -73,3 +73,40 @@ export const capitulosData = [
     ]
   }
 ];
+
+// 🐍 Nuevos datos para el bloque de Python
+export const pythonData = [
+  {
+    id: 'py_intro',
+    numero: 1,
+    title: 'Fundamentos de Python para Ingeniería',
+    descripcion: 'Sintaxis básica, estructuras de control, listas y definición de funciones matemáticas.',
+    icon: 'bi-filetype-py',
+    subtemas: [
+      { id: 'py_1.1', title: '1.1 Entorno y Variables' },
+      { id: 'py_1.2', title: '1.2 Funciones y Control de Flujo' },
+    ]
+  },
+  {
+    id: 'py_numpy',
+    numero: 2,
+    title: 'NumPy y SciPy',
+    descripcion: 'Manejo eficiente de vectores, matrices y librerías científicas avanzadas.',
+    icon: 'bi-cpu',
+    subtemas: [
+      { id: 'py_2.1', title: '2.1 Arreglos Multidimensionales' },
+      { id: 'py_2.2', title: '2.2 Operaciones Matriciales' },
+    ]
+  },
+  {
+    id: 'py_matplotlib',
+    numero: 3,
+    title: 'Visualización con Matplotlib',
+    descripcion: 'Gráficas de funciones, convergencia de métodos y representación visual de datos.',
+    icon: 'bi-bar-chart-line',
+    subtemas: [
+      { id: 'py_3.1', title: '3.1 Gráficas 2D y Estilos' },
+      { id: 'py_3.2', title: '3.2 Graficación de Raíces e Intervalos' },
+    ]
+  }
+];
