@@ -127,4 +127,5 @@ const SimuladorTab = () => {
   );
 };
 
+
 export default SimuladorTab;

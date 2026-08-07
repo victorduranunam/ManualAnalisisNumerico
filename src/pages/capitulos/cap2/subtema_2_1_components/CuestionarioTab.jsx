@@ -10,6 +10,7 @@ const CuestionarioTab = () => {
     setSubmitted(true);
   };
 
+  
   const isCorrect = selectedOption === "b";
 
   return (

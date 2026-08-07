@@ -54,6 +54,7 @@ const EjerciciosTab = () => {
           </Accordion.Body>
         </Accordion.Item>
 
+
         {/* Ejercicio 2 */}
         <Accordion.Item eventKey="1">
           <Accordion.Header>
