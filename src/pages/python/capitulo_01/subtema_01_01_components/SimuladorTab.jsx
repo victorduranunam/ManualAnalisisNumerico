@@ -6,7 +6,7 @@ const SimuladorTab = () => (
     <Card.Body>
       <h5 className="text-primary fw-bold mb-3">SimuladorTab</h5>
       <Alert variant="light" className="border mb-0">
-        Este contenido está reservado para el subtema de Python.
+        Este contenido simulador está reservado para el subtema de Python.
       </Alert>
     </Card.Body>
   </Card>

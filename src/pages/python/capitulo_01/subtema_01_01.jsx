@@ -1,10 +1,16 @@
 ﻿import React from 'react';
 import { Tab, Nav, Card } from 'react-bootstrap';
 
+import FundamentosTab from './subtema_01_01_components/FundamentosTab';
+import VideosTab from './subtema_01_01_components/VideosTab';
+import SimuladorTab from './subtema_01_01_components/SimuladorTab';
+import EjerciciosTab from './subtema_01_01_components/EjerciciosTab';
+import CuestionarioTab from './subtema_01_01_components/CuestionarioTab';
+
 const SubtemaPython_1_1 = () => (
   <Card className="shadow-sm border-0 mb-4">
     <Card.Header className="bg-secondary text-white">
-      <h5 className="mb-0">Subtema 1 del capítulo 1</h5>
+      <h5 className="mb-0">Subtema 1.1 - Introducción a Python</h5>
     </Card.Header>
     <Card.Body>
       <Tab.Container id="python-subtema-1-1-tabs" defaultActiveKey="fundamentos">
@@ -16,21 +22,11 @@ const SubtemaPython_1_1 = () => (
           <Nav.Item><Nav.Link eventKey="cuestionario">Cuestionario</Nav.Link></Nav.Item>
         </Nav>
         <Tab.Content>
-          <Tab.Pane eventKey="fundamentos">
-            <div className="p-3 border rounded bg-light"><p className="text-muted mb-0">Fundamentos del subtema 1 del capítulo 1.</p></div>
-          </Tab.Pane>
-          <Tab.Pane eventKey="videos">
-            <div className="p-3 border rounded bg-light"><p className="text-muted mb-0">Videos del subtema 1 del capítulo 1.</p></div>
-          </Tab.Pane>
-          <Tab.Pane eventKey="simulador">
-            <div className="p-3 border rounded bg-light"><p className="text-muted mb-0">Simulador del subtema 1 del capítulo 1.</p></div>
-          </Tab.Pane>
-          <Tab.Pane eventKey="ejercicios">
-            <div className="p-3 border rounded bg-light"><p className="text-muted mb-0">Ejercicios del subtema 1 del capítulo 1.</p></div>
-          </Tab.Pane>
-          <Tab.Pane eventKey="cuestionario">
-            <div className="p-3 border rounded bg-light"><p className="text-muted mb-0">Cuestionario del subtema 1 del capítulo 1.</p></div>
-          </Tab.Pane>
+          <Tab.Pane eventKey="fundamentos"><FundamentosTab /></Tab.Pane>
+          <Tab.Pane eventKey="videos"><VideosTab /></Tab.Pane>
+          <Tab.Pane eventKey="simulador"><SimuladorTab /></Tab.Pane>
+          <Tab.Pane eventKey="ejercicios"><EjerciciosTab /></Tab.Pane>
+          <Tab.Pane eventKey="cuestionario"><CuestionarioTab /></Tab.Pane>
         </Tab.Content>
       </Tab.Container>
     </Card.Body>

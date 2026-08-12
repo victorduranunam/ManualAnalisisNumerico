@@ -25,14 +25,9 @@ function NavigationBar({ activeSection, onSelectSection }) {
               <i className="bi bi-house-door me-1"></i> Inicio
             </Nav.Link>
 
-            <Nav.Link 
-              active={activeSection === 'python'} 
-              onClick={() => onSelectSection('python')}
-            >
-              <i className="bi bi-code-square me-1"></i> Intro a Python
-            </Nav.Link>
 
-            <NavDropdown title={<span><i className="bi bi-journal-text me-1"></i> Capítulos</span>} id="nav-capitulos-dropdown">
+
+            <NavDropdown title={<span><i className="bi bi-journal-text me-1"></i> An&aacute;lisis Num&eacute;rico</span>} id="nav-capitulos-dropdown">
               {capitulosData.map((cap) => (
                 <NavDropdown.Item 
                   key={cap.id} 
@@ -45,7 +40,7 @@ function NavigationBar({ activeSection, onSelectSection }) {
               ))}
             </NavDropdown>
 
-            <NavDropdown title={<span><i className="bi bi-filetype-py me-1"></i> Módulos Python</span>} id="nav-python-dropdown">
+            <NavDropdown title={<span><i className="bi bi-filetype-py me-1"></i> Introducci&oacute;n a Python</span>} id="nav-python-dropdown">
               {pythonData.map((py) => (
                 <NavDropdown.Item 
                   key={py.id} 
