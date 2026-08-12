@@ -58,7 +58,6 @@ const FundamentosTab = () => {
           </li>
         </ol>
       </div>
-      
 
       <h5 className="text-primary fw-bold mb-3">
         <i className="bi bi-shield-check me-2"></i>Criterios de Convergencia y Error

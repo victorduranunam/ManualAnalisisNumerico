@@ -1,3 +1,14 @@
+const buildSubtemas = (numero, prefix) => [
+  { id: `${numero}.1`, title: `${numero}.1 Subtema inicial` },
+  { id: `${numero}.2`, title: `${numero}.2 Subtema complementario` },
+  { id: `${numero}.3`, title: `${numero}.3 Conceptos clave` },
+  { id: `${numero}.4`, title: `${numero}.4 Método o aplicación` },
+  { id: `${numero}.5`, title: `${numero}.5 Ejemplos y análisis` },
+  { id: `${numero}.6`, title: `${numero}.6 Ejercicios y práctica` },
+  { id: `${numero}.7`, title: `${numero}.7 Casos avanzados` },
+  { id: `${numero}.8`, title: `${numero}.8 Evaluación y cierre` },
+];
+
 export const capitulosData = [
   {
     id: 'cap1',
@@ -5,11 +16,7 @@ export const capitulosData = [
     title: 'Teoría de Errores',
     descripcion: 'Conceptos de error absoluto, relativo, redondeo, truncamiento y propagación de errores.',
     icon: 'bi-calculator',
-    subtemas: [
-      { id: '1.1', title: '1.1 Definición de Error Absoluto y Relativo' },
-      { id: '1.2', title: '1.2 Errores de Redondeo y Truncamiento' },
-      { id: '1.3', title: '1.3 Propagación de Errores' },
-    ]
+    subtemas: buildSubtemas(1)
   },
   {
     id: 'cap2',
@@ -17,12 +24,7 @@ export const capitulosData = [
     title: 'Ecuaciones No Lineales',
     descripcion: 'Métodos para la búsqueda de raíces en funciones continuas de una variable.',
     icon: 'bi-diagram-3',
-    subtemas: [
-      { id: '2.1', title: '2.1 Método de Bisección' },
-      { id: '2.2', title: '2.2 Método de Regula Falsi' },
-      { id: '2.3', title: '2.3 Método de Newton-Raphson' },
-      { id: '2.4', title: '2.4 Método de la Secante' },
-    ]
+    subtemas: buildSubtemas(2)
   },
   {
     id: 'cap3',
@@ -30,11 +32,7 @@ export const capitulosData = [
     title: 'Sistemas de Ecuaciones',
     descripcion: 'Solución de sistemas lineales mediante métodos directos e iterativos.',
     icon: 'bi-grid-3x3',
-    subtemas: [
-      { id: '3.1', title: '3.1 Eliminación Gaussiana' },
-      { id: '3.2', title: '3.2 Descomposición LU' },
-      { id: '3.3', title: '3.3 Métodos Iterativos: Gauss-Seidel y Jacobi' },
-    ]
+    subtemas: buildSubtemas(3)
   },
   {
     id: 'cap4',
@@ -42,11 +40,7 @@ export const capitulosData = [
     title: 'Interpolación y Ajuste',
     descripcion: 'Ajuste de datos por mínimos cuadrados y polinomiales de Lagrange y Newton.',
     icon: 'bi-graph-up',
-    subtemas: [
-      { id: '4.1', title: '4.1 Polinomios de Lagrange' },
-      { id: '4.2', title: '4.2 Diferencias Divididas de Newton' },
-      { id: '4.3', title: '4.3 Regresión por Mínimos Cuadrados' },
-    ]
+    subtemas: buildSubtemas(4)
   },
   {
     id: 'cap5',
@@ -54,11 +48,7 @@ export const capitulosData = [
     title: 'Integración Numérica',
     descripcion: 'Aproximación de integrales definidas por reglas compuestas y cuadraturas.',
     icon: 'bi-ui-checks',
-    subtemas: [
-      { id: '5.1', title: '5.1 Regla del Trapecio' },
-      { id: '5.2', title: '5.2 Reglas de Simpson (1/3 y 3/8)' },
-      { id: '5.3', title: '5.3 Cuadratura Gaussiana' },
-    ]
+    subtemas: buildSubtemas(5)
   },
   {
     id: 'cap6',
@@ -66,11 +56,7 @@ export const capitulosData = [
     title: 'Ecuaciones Diferenciales',
     descripcion: 'Solución numérica de problemas de valor inicial y condiciones en la frontera.',
     icon: 'bi-activity',
-    subtemas: [
-      { id: '6.1', title: '6.1 Método de Euler' },
-      { id: '6.2', title: '6.2 Métodos de Runge-Kutta (2° y 4° Orden)' },
-      { id: '6.3', title: '6.3 Sistemas de EDO' },
-    ]
+    subtemas: buildSubtemas(6)
   }
 ];
 

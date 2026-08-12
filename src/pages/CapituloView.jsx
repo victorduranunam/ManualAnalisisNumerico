@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, ListGroup, Badge, Button } from "react-bootstrap";
-
-// Importación de los componentes de cada subtema
-import Subtema_2_1 from "./capitulos/cap2/subtema_2_1";
-import Subtema_2_2 from "./capitulos/cap2/subtema_2_2";
-
-// 1. Diccionario para vincular los IDs de los subtemas con sus componentes correspondientes
-const SUBTEMA_COMPONENTS = {
-  "2.1": Subtema_2_1,
-  "2.2": Subtema_2_2,
-  // A medida que crees más subtemas, solo los agregas aquí:
-  // "1.1": Subtema_1_1,
-  // "2.3": Subtema_2_3,
-};
+import SubtemaSkeleton from "./capitulos/SubtemaSkeleton";
 
 function CapituloView({ capitulo }) {
   // Estado inicial fijado en "general" para mostrar siempre la portada del capítulo primero
@@ -32,18 +20,18 @@ function CapituloView({ capitulo }) {
       return <CapituloGeneralView capitulo={capitulo} onSelectSubtema={setActiveSubtema} />;
     }
 
-    // Caso B: Subtema Registrado
-    const ComponenteSubtema = SUBTEMA_COMPONENTS[activeSubtema];
-    if (ComponenteSubtema) {
-      return <ComponenteSubtema />;
+    // Caso B: Subtema registrado dentro del capítulo actual, usando el esqueleto genérico
+    const subtemaActual = capitulo.subtemas?.find((sub) => sub.id === activeSubtema);
+    if (subtemaActual) {
+      return <SubtemaSkeleton capitulo={capitulo} subtemaId={activeSubtema} />;
     }
 
-    // Caso C: Subtema en Desarrollo o ID no coincidente
+    // Caso C: Subtema no encontrado
     return (
       <Card className="p-4 shadow-sm border-0 text-center">
         <h5 className="text-warning fw-bold mb-2">Subtema en desarrollo</h5>
         <p className="text-muted mb-0">
-          El subtema <code>"{activeSubtema}"</code> aún no tiene un componente asignado en <code>SUBTEMA_COMPONENTS</code>.
+          El subtema <code>"{activeSubtema}"</code> aún no está definido dentro del capítulo actual.
         </p>
       </Card>
     );
