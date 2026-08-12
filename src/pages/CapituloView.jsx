@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, ListGroup, Badge, Button } from "react-bootstrap";
 
 // Importación de los componentes de cada subtema
-import Subtema_2_1 from "./capitulos/cap2/Subtema_2_1";
-import Subtema_2_2 from "./capitulos/cap2/Subtema_2_2";
+import Subtema_2_1 from "./capitulos/cap2/subtema_2_1";
+import Subtema_2_2 from "./capitulos/cap2/subtema_2_2";
 
 // 1. Diccionario para vincular los IDs de los subtemas con sus componentes correspondientes
 const SUBTEMA_COMPONENTS = {
   "2.1": Subtema_2_1,
-  //"2.2": Subtema_2_2,
+  "2.2": Subtema_2_2,
   // A medida que crees más subtemas, solo los agregas aquí:
   // "1.1": Subtema_1_1,
   // "2.3": Subtema_2_3,
