@@ -11,7 +11,7 @@ function NavigationBar({ activeSection, onSelectSection }) {
           onClick={() => onSelectSection('inicio')}
           className="fw-bold text-warning fs-6"
         >
-          <i className="bi bi-mortarboard-fill me-2"></i>PAPIME 112032
+          <i className="bi bi-mortarboard-fill me-2"></i>PAPIME 103226
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-navbar" />

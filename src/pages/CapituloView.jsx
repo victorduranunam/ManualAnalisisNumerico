@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, ListGroup, Badge, Button } from "react-bootstrap";
 import SubtemaSkeleton from "./capitulos/SubtemaSkeleton";
 
+// Carga dinámica (eager) de subtemas específicos si existen (Vite)
+const subtemaModules = import.meta.glob("./capitulos/**/subtema_*.jsx", { eager: true });
+
+// DEBUG: Mostrar qué módulos se cargaron
+console.log("Módulos cargados:", Object.keys(subtemaModules));
+
 function CapituloView({ capitulo }) {
   // Estado inicial fijado en "general" para mostrar siempre la portada del capítulo primero
   const [activeSubtema, setActiveSubtema] = useState("general");
@@ -20,9 +26,27 @@ function CapituloView({ capitulo }) {
       return <CapituloGeneralView capitulo={capitulo} onSelectSubtema={setActiveSubtema} />;
     }
 
-    // Caso B: Subtema registrado dentro del capítulo actual, usando el esqueleto genérico
+    // Intentar cargar un componente específico para el subtema si existe
     const subtemaActual = capitulo.subtemas?.find((sub) => sub.id === activeSubtema);
     if (subtemaActual) {
+      try {
+        const parts = String(activeSubtema).split('.');
+        const subNum = parts.length > 1 ? parts[1] : parts[0];
+        const relPath = `./capitulos/cap${capitulo.numero}/subtema_${capitulo.numero}_${subNum}.jsx`;
+        console.log("Buscando subtema:", relPath);
+        const mod = subtemaModules[relPath];
+        console.log("Módulo encontrado:", !!mod);
+        if (mod && mod.default) {
+          const Specific = mod.default;
+          console.log("Renderizando componente específico:", relPath);
+          return <Specific />;
+        }
+      } catch (e) {
+        // Si falla la resolución, continuamos con el fallback
+        console.error("Error al cargar subtema:", e);
+      }
+
+      // Fallback genérico si no existe un componente específico
       return <SubtemaSkeleton capitulo={capitulo} subtemaId={activeSubtema} />;
     }
 

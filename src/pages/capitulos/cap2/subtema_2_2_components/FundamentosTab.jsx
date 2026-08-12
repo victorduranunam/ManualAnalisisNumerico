@@ -7,7 +7,7 @@ const FundamentosTab = () => {
         <i className="bi bi-book-half me-2"></i>Fundamentos del subcapítulo 2.2
       </h5>
       <p className="text-muted mb-0">
-        Aquí va la teoría del subcapítulo: definiciones, conceptos clave, condiciones, algoritmo y explicación del método.
+        Aquí va la teoría del subcapítulo 2.2 fundamentos : definiciones, conceptos clave, condiciones, algoritmo y explicación del método.
       </p>
     </div>
   );
