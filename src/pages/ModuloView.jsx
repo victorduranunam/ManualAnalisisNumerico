@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, ListGroup, Badge, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, ListGroup, Badge, Button, Form } from "react-bootstrap";
 import SubtemaSkeleton from "./analisisNumerico/SubtemaSkeleton";
 
 // Carga dinámica de módulos usando Vite
@@ -22,13 +22,26 @@ function ModuloView({ capitulo }) {
   const folderName = esPython ? "python" : "analisisNumerico";
   const themeColor = esPython ? "success" : "primary";
 
+  // Manejador de selección con scroll automático para móviles
+  const handleSelectSubtema = (subId) => {
+    setActiveSubtema(subId);
+    
+    // Si estamos en pantalla móvil (< 768px), desplaza suavemente hacia el contenido
+    if (window.innerWidth < 768) {
+      const contentArea = document.getElementById("area-contenido-subtema");
+      if (contentArea) {
+        contentArea.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   const renderContenido = () => {
     // Portada / Vista general del capítulo
     if (activeSubtema === "general") {
       return (
         <CapituloGeneralView 
           capitulo={capitulo} 
-          onSelectSubtema={setActiveSubtema} 
+          onSelectSubtema={handleSelectSubtema} 
           themeColor={themeColor} 
         />
       );
@@ -71,9 +84,36 @@ function ModuloView({ capitulo }) {
 
   return (
     <Container fluid className="py-3">
+      
+      {/* 📱 NAVEGACIÓN COMPACTA EN MÓVILES (Visible únicamente en pantalla chica < md) */}
+      <div className="d-block d-md-none mb-3">
+        <Card className="shadow-sm border-0">
+          <Card.Body className="p-3">
+            <Form.Group>
+              <Form.Label className="fw-bold text-dark small mb-2">
+                <i className={`bi bi-journal-bookmark-fill me-2 text-${themeColor}`}></i>
+                Navegar en Capítulo {capitulo.numero}:
+              </Form.Label>
+              <Form.Select 
+                value={activeSubtema} 
+                onChange={(e) => handleSelectSubtema(e.target.value)}
+                className="fw-bold border-secondary"
+              >
+                <option value="general">📋 Vista General del Capítulo</option>
+                {capitulo.subtemas?.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    📌 {sub.title}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Card.Body>
+        </Card>
+      </div>
+
       <Row className="g-4">
-        {/* SIDEBAR DE NAVEGACIÓN LATERAL */}
-        <Col md={3}>
+        {/* 💻 SIDEBAR DE NAVEGACIÓN EN ESCRITORIO (Oculta en móviles, visible desde md) */}
+        <Col md={3} className="d-none d-md-block">
           <Card className="shadow-sm border-0 sticky-top" style={{ top: "80px" }}>
             <Card.Header className={`bg-${themeColor} text-white fw-bold d-flex justify-content-between align-items-center`}>
               <span>{capitulo.title}</span>
@@ -83,7 +123,7 @@ function ModuloView({ capitulo }) {
               <ListGroup.Item
                 action
                 active={activeSubtema === "general"}
-                onClick={() => setActiveSubtema("general")}
+                onClick={() => handleSelectSubtema("general")}
                 className="fw-bold text-dark d-flex align-items-center"
                 style={{ cursor: "pointer" }}
               >
@@ -98,7 +138,7 @@ function ModuloView({ capitulo }) {
                   key={sub.id}
                   action
                   active={activeSubtema === sub.id}
-                  onClick={() => setActiveSubtema(sub.id)}
+                  onClick={() => handleSelectSubtema(sub.id)}
                   className="ps-4"
                   style={{ cursor: "pointer" }}
                 >
@@ -109,8 +149,8 @@ function ModuloView({ capitulo }) {
           </Card>
         </Col>
 
-        {/* ÁREA DE CONTENIDO */}
-        <Col md={9}>
+        {/* ÁREA DE CONTENIDO (Identificada con id para el auto-scroll) */}
+        <Col xs={12} md={9} id="area-contenido-subtema">
           {renderContenido()}
         </Col>
       </Row>
@@ -170,14 +210,14 @@ function CapituloGeneralView({ capitulo, onSelectSubtema, themeColor }) {
           >
             <div>
               <h6 className="fw-bold mb-1">{sub.title}</h6>
-              <small className="text-muted">
+              <small className="text-muted d-none d-sm-block">
                 Fundamentos, Videos de Apoyo, Simulador, Ejercicios y Cuestionario.
               </small>
             </div>
             <Button
               variant={`outline-${themeColor}`}
               size="sm"
-              className="fw-bold"
+              className="fw-bold ms-2"
               onClick={() => onSelectSubtema(sub.id)}
             >
               Estudiar Tema &rarr;
