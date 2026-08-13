@@ -1,13 +1,13 @@
-// Generador de subtemas para Análisis Numérico (1.1, 1.2, ..., 1.8)
+// Generador de subtemas para Análisis Numérico (8 subtemas por capítulo)
 const buildSubtemas = (numero, prefix = 'Subtema') => [
-  { id: `${numero}.1`, title: `${numero}.1 ${prefix} 1` },
-  { id: `${numero}.2`, title: `${numero}.2 ${prefix} 2` },
-  { id: `${numero}.3`, title: `${numero}.3 ${prefix} 3` },
-  { id: `${numero}.4`, title: `${numero}.4 ${prefix} 4` },
-  { id: `${numero}.5`, title: `${numero}.5 ${prefix} 5` },
-  { id: `${numero}.6`, title: `${numero}.6 ${prefix} 6` },
-  { id: `${numero}.7`, title: `${numero}.7 ${prefix} 7` },
-  { id: `${numero}.8`, title: `${numero}.8 ${prefix} 8` },
+  { id: `subtema_${numero}_1`, title: `${numero}.1 ${prefix} 1` },
+  { id: `subtema_${numero}_2`, title: `${numero}.2 ${prefix} 2` },
+  { id: `subtema_${numero}_3`, title: `${numero}.3 ${prefix} 3` },
+  { id: `subtema_${numero}_4`, title: `${numero}.4 ${prefix} 4` },
+  { id: `subtema_${numero}_5`, title: `${numero}.5 ${prefix} 5` },
+  { id: `subtema_${numero}_6`, title: `${numero}.6 ${prefix} 6` },
+  { id: `subtema_${numero}_7`, title: `${numero}.7 ${prefix} 7` },
+  { id: `subtema_${numero}_8`, title: `${numero}.8 ${prefix} 8` },
 ];
 
 export const analisisNumericoData = [
@@ -61,20 +61,14 @@ export const analisisNumericoData = [
   }
 ];
 
-// Generador de subtemas para Python (1.1, 1.2, ..., 1.10)
+// Generador de subtemas para Python (IDs estilo subtema_1_1)
 const buildPythonSubtemas = (capNumero) => [
-  { id: `${capNumero}.1`, title: `Subtema ${capNumero}.1` },
-  { id: `${capNumero}.2`, title: `Subtema ${capNumero}.2` },
-  { id: `${capNumero}.3`, title: `Subtema ${capNumero}.3` },
-  { id: `${capNumero}.4`, title: `Subtema ${capNumero}.4` },
-  { id: `${capNumero}.5`, title: `Subtema ${capNumero}.5` },
-  { id: `${capNumero}.6`, title: `Subtema ${capNumero}.6` },
-  { id: `${capNumero}.7`, title: `Subtema ${capNumero}.7` },
-  { id: `${capNumero}.8`, title: `Subtema ${capNumero}.8` },
-  { id: `${capNumero}.9`, title: `Subtema ${capNumero}.9` },
-  { id: `${capNumero}.10`, title: `Subtema ${capNumero}.10` },
+  { id: `subtema_${capNumero}_1`, title: `Subtema ${capNumero}.1` },
+  { id: `subtema_${capNumero}_2`, title: `Subtema ${capNumero}.2` },
+  { id: `subtema_${capNumero}_3`, title: `Subtema ${capNumero}.3` },
 ];
 
+// ARREGLO COMPLETO CON LOS 10 CAPÍTULOS DE PYTHON
 export const pythonData = [
   {
     id: 'py_cap1',

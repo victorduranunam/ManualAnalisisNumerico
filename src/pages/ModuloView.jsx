@@ -99,7 +99,7 @@ function ModuloView({ capitulo }) {
                 onChange={(e) => handleSelectSubtema(e.target.value)}
                 className="fw-bold border-secondary"
               >
-                <option value="general">📋 Vista General del Capítulo</option>
+                <option value="general">📋 Vista General del Cap&iacute;tulo</option>
                 {capitulo.subtemas?.map((sub) => (
                   <option key={sub.id} value={sub.id}>
                     📌 {sub.title}
