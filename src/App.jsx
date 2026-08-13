@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import NavigationBar from './components/NavigationBar';
 import Home from './pages/Home';
-import PythonIntro from './pages/PythonIntro';
-import CapituloView from './pages/CapituloView';
-import { capitulosData, pythonData } from './data/capitulosData';
+import ModuloView from './pages/ModuloView';
+import { analisisNumericoData, pythonData } from './data/capitulosData';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function App() {
   const [activeSection, setActiveSection] = useState('inicio');
 
-  const todosLosCapitulos = [...capitulosData, ...pythonData];
+  // Arreglo unificado de temas
+  const todosLosCapitulos = [...analisisNumericoData, ...pythonData];
   const capituloSeleccionado = todosLosCapitulos.find(c => c.id === activeSection);
 
   return (
@@ -38,8 +38,9 @@ function App() {
       {/* Ruteador de Contenido Dinámico */}
       <main className="flex-grow-1 my-4">
         {activeSection === 'inicio' && <Home onSelectSection={setActiveSection} />}
-        {activeSection === 'python' && <PythonIntro />}
-        {capituloSeleccionado && <CapituloView capitulo={capituloSeleccionado} />}
+        
+        {/* Renderiza dinámicamente tanto capítulos de Análisis Numérico como de Python */}
+        {capituloSeleccionado && <ModuloView capitulo={capituloSeleccionado} />}
       </main>
 
       {/* Footer */}

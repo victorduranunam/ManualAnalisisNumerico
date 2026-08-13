@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-// 1. IMPORTAS AMBOS ARREGLOS AQUÍ 👇
-import { capitulosData, pythonData } from '../data/capitulosData';
+// ✅ Importación corregida con el nuevo nombre de la variable
+import { analisisNumericoData, pythonData } from '../data/capitulosData';
 
 function Home({ onSelectSection }) {
   return (
@@ -18,9 +18,9 @@ function Home({ onSelectSection }) {
         <i className="bi bi-grid-fill me-2"></i>Unidades Temáticas del Curso de Análisis Numérico
       </h4>
 
-      {/* Primer Grid: Recorre los capítulos de Análisis Numérico */}
+      {/* Primer Grid: Recorre los capítulos usando analisisNumericoData */}
       <Row className="g-4">
-        {capitulosData.map((cap) => (
+        {analisisNumericoData.map((cap) => (
           <Col md={6} lg={4} key={cap.id}>
             <Card className="h-100 shadow-sm border-0 hover-card">
               <Card.Header className="bg-primary text-white d-flex align-items-center justify-content-between">
@@ -49,7 +49,7 @@ function Home({ onSelectSection }) {
         <i className="bi bi-filetype-py me-2"></i>Introducción a Python para el manejo de Análisis Numérico
       </h4>
 
-      {/* Segundo Grid: Recorre la lista de pythonData 👇 */}
+      {/* Segundo Grid: Recorre la lista de pythonData */}
       <Row className="g-4">
         {pythonData.map((py) => (
           <Col md={6} lg={4} key={py.id}>

@@ -1,10 +1,21 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
-import { capitulosData, pythonData } from '../data/capitulosData';
+// ✅ Importación actualizada: analisisNumericoData en lugar de capitulosData
+import { analisisNumericoData, pythonData } from '../data/capitulosData';
 
 function NavigationBar({ activeSection, onSelectSection }) {
   return (
-    <Navbar bg="dark" variant="dark" expand="xl" className="shadow-sm sticky-top">
+    /* 
+       Añadimos zIndex: 1050 para que el desplegable del menú flote 
+       por encima de la barra lateral del capítulo.
+    */
+    <Navbar 
+      bg="dark" 
+      variant="dark" 
+      expand="xl" 
+      className="shadow-sm sticky-top"
+      style={{ zIndex: 1050 }}
+    >
       <Container fluid>
         <Navbar.Brand 
           style={{ cursor: 'pointer' }} 
@@ -25,10 +36,9 @@ function NavigationBar({ activeSection, onSelectSection }) {
               <i className="bi bi-house-door me-1"></i> Inicio
             </Nav.Link>
 
-
-
-            <NavDropdown title={<span><i className="bi bi-journal-text me-1"></i> An&aacute;lisis Num&eacute;rico</span>} id="nav-capitulos-dropdown">
-              {capitulosData.map((cap) => (
+            {/* ✅ Desplegable de Análisis Numérico */}
+            <NavDropdown title={<span><i className="bi bi-journal-text me-1"></i> Análisis Numérico</span>} id="nav-capitulos-dropdown">
+              {analisisNumericoData.map((cap) => (
                 <NavDropdown.Item 
                   key={cap.id} 
                   active={activeSection === cap.id}
@@ -40,7 +50,8 @@ function NavigationBar({ activeSection, onSelectSection }) {
               ))}
             </NavDropdown>
 
-            <NavDropdown title={<span><i className="bi bi-filetype-py me-1"></i> Introducci&oacute;n a Python</span>} id="nav-python-dropdown">
+            {/* ✅ Desplegable de Python */}
+            <NavDropdown title={<span><i className="bi bi-filetype-py me-1"></i> Introducción a Python</span>} id="nav-python-dropdown">
               {pythonData.map((py) => (
                 <NavDropdown.Item 
                   key={py.id} 
