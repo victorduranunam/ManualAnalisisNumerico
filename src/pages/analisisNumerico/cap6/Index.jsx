@@ -4,19 +4,14 @@ import React from 'react';
 import Subtema6_1 from './subtema_6_1';
 import Subtema6_2 from './subtema_6_2';
 import Subtema6_3 from './subtema_6_3';
-import Subtema6_4 from './subtema_6_4';
-import Subtema6_5 from './subtema_6_5';
-import Subtema6_6 from './subtema_6_6';
+
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
-    { id: 'subtema_6_1', title: '6.1 Importancia de los métodos numéricos en Ingeniería' },
-    { id: 'subtema_6_2', title: '6.2 Representación de números en punto flotante y sus limitaciones' },
-    { id: 'subtema_6_3', title: '6.3 Clasificación de los errores numéricos' },
-    { id: 'subtema_6_4', title: '6.4 Criterios fundamentales en métodos numéricos: precisión, estabilidad y convergencia' },
-    { id: 'subtema_6_5', title: '6.5 Aproximación de funciones por medio del polinomio de Taylor' },
-    { id: 'subtema_6_6', title: '6.6 Implementación y herramientas computacionales para métodos numéricos en Ingeniería' },
-   
+    { id: 'subtema_6_1', title: '6.1 Fundamentos de simulación y generación de números aleatorios con herramientas computacionales' },
+    { id: 'subtema_6_2', title: '6.2 Simulación Monte Carlo. Integración numérica' },
+    { id: 'subtema_6_3', title: '6.3 Simulación de líneas de espera con uno y dos servidores, con herramientas computacionales' }
+    
   ];
 
   return (
@@ -64,11 +59,11 @@ export const Index = ({ activeSection, onSelectSection }) => {
         <div className="col-md-9">
           <div className="bg-white p-4 rounded shadow-sm">
             
-            {/* VISTA GENERAL DEL CAPÍTULO 1 */}
+            {/* VISTA GENERAL DEL CAPÍTULO 6 */}
             {activeSection === 'cap6' && (
               <div>
-                <span className="badge bg-primary mb-2">Capítulo 1</span>
-                <h2 className="fw-bold text-dark">Fundamentos y errores en métodos numéricos </h2>
+                <span className="badge bg-primary mb-2">Capítulo 6</span>
+                <h2 className="fw-bold text-dark">Método de diferencias finitas para ecuaciones diferenciales parciales elípticas</h2>
                 <p className="text-muted mb-4">
                   Estudio de los errores de redondeo, truncamiento y la representación numérica en computadoras.
                 </p>
@@ -81,9 +76,8 @@ export const Index = ({ activeSection, onSelectSection }) => {
                         Objetivos de Aprendizaje
                       </h6>
                       <p className="small mb-0 text-secondary">
-                        Comprender la representación en punto flotante, los tipos de errores numéricos y los criterios de precisión,
-estabilidad y convergencia de métodos numéricos, relacionando estos conceptos con la precisión de los resultados en
-cálculos computacionales.
+                       Aplicar simulación Monte Carlo con apoyo de herramientas computacionales para estimar valores numéricos
+de interés en problemas de ingeniería.
                       </p>
                     </div>
                   </div>
@@ -133,12 +127,9 @@ cálculos computacionales.
             {activeSection === 'subtema_6_1' && <Subtema6_1 />}
             {activeSection === 'subtema_6_2' && <Subtema6_2 />}
             {activeSection === 'subtema_6_3' && <Subtema6_3 />}
-            {activeSection === 'subtema_6_4' && <Subtema6_4 />}
-            {activeSection === 'subtema_6_5' && <Subtema6_5 />}
-            {activeSection === 'subtema_6_6' && <Subtema6_6 />}
-
+            
             {/* Para subtemas que aún no tengan su archivo .jsx creado */}
-            {activeSection !== 'cap6' && !['subtema_6_1', 'subtema_6_2', 'subtema_6_3', 'subtema_6_4', 'subtema_6_5', 'subtema_6_6'].includes(activeSection) && (
+            {activeSection !== 'cap6' && !['subtema_6_1', 'subtema_6_2', 'subtema_6_3'].includes(activeSection) && (
               <div className="alert alert-light border">
                 <h5 className="text-primary"><i className="bi bi-journal-code me-2"></i>En desarrollo</h5>
                 <p className="mb-0 text-muted">

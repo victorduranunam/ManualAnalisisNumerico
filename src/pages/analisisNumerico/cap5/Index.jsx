@@ -6,16 +6,15 @@ import Subtema5_2 from './subtema_5_2';
 import Subtema5_3 from './subtema_5_3';
 import Subtema5_4 from './subtema_5_4';
 import Subtema5_5 from './subtema_5_5';
-import Subtema5_6 from './subtema_5_6';
+
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
-    { id: 'subtema_5_1', title: '5.1 Importancia de los métodos numéricos en Ingeniería' },
-    { id: 'subtema_5_2', title: '5.2 Representación de números en punto flotante y sus limitaciones' },
-    { id: 'subtema_5_3', title: '5.3 Clasificación de los errores numéricos' },
-    { id: 'subtema_5_4', title: '5.4 Criterios fundamentales en métodos numéricos: precisión, estabilidad y convergencia' },
-    { id: 'subtema_5_5', title: '5.5 Aproximación de funciones por medio del polinomio de Taylor' },
-    { id: 'subtema_5_6', title: '5.6 Implementación y herramientas computacionales para métodos numéricos en Ingeniería' },
+    { id: 'subtema_5_1', title: '5.1 Método de diferencias finitas para ecuaciones diferenciales ordinarias: problemas de valores en lafrontera' },
+    { id: 'subtema_5_2', title: '5.2 Métodos de paso a paso: Euler y Runge-Kutta de cuarto orden' },
+    { id: 'subtema_5_3', title: '5.3 Resolución numérica de sistemas de ecuaciones diferenciales usando los métodos de paso a paso' },
+    { id: 'subtema_5_4', title: '5.4 Método de diferencias finitas para ecuaciones diferenciales parciales elípticas' },
+    { id: 'subtema_5_5', title: '5.5 Implementación y herramientas computacionales para métodos numéricos en Ingeniería' },
    
   ];
 
@@ -67,8 +66,8 @@ export const Index = ({ activeSection, onSelectSection }) => {
             {/* VISTA GENERAL DEL CAPÍTULO 1 */}
             {activeSection === 'cap5' && (
               <div>
-                <span className="badge bg-primary mb-2">Capítulo 1</span>
-                <h2 className="fw-bold text-dark">Fundamentos y errores en métodos numéricos </h2>
+                <span className="badge bg-primary mb-2">Capítulo 5</span>
+                <h2 className="fw-bold text-dark">Resolución numérica de ecuaciones diferenciales </h2>
                 <p className="text-muted mb-4">
                   Estudio de los errores de redondeo, truncamiento y la representación numérica en computadoras.
                 </p>
@@ -81,9 +80,8 @@ export const Index = ({ activeSection, onSelectSection }) => {
                         Objetivos de Aprendizaje
                       </h6>
                       <p className="small mb-0 text-secondary">
-                        Comprender la representación en punto flotante, los tipos de errores numéricos y los criterios de precisión,
-estabilidad y convergencia de métodos numéricos, relacionando estos conceptos con la precisión de los resultados en
-cálculos computacionales.
+Aplicar métodos numéricos, con apoyo de herramientas computacionales, para resolver ecuaciones
+diferenciales y sistemas de ecuaciones diferenciales aplicados a problemas de ingeniería.
                       </p>
                     </div>
                   </div>
@@ -135,10 +133,9 @@ cálculos computacionales.
             {activeSection === 'subtema_5_3' && <Subtema5_3 />}
             {activeSection === 'subtema_5_4' && <Subtema5_4 />}
             {activeSection === 'subtema_5_5' && <Subtema5_5 />}
-            {activeSection === 'subtema_5_6' && <Subtema5_6 />}
 
             {/* Para subtemas que aún no tengan su archivo .jsx creado */}
-            {activeSection !== 'cap5' && !['subtema_5_1', 'subtema_5_2', 'subtema_5_3', 'subtema_5_4', 'subtema_5_5', 'subtema_5_6'].includes(activeSection) && (
+            {activeSection !== 'cap5' && !['subtema_5_1', 'subtema_5_2', 'subtema_5_3', 'subtema_5_4', 'subtema_5_5'].includes(activeSection) && (
               <div className="alert alert-light border">
                 <h5 className="text-primary"><i className="bi bi-journal-code me-2"></i>En desarrollo</h5>
                 <p className="mb-0 text-muted">
