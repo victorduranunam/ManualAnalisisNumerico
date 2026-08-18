@@ -8,8 +8,8 @@ import Subtema2_3 from './subtema_2_3';
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
-    { id: ' subtema_2_1', title: '2.1 Métodos cerrados para la obtención de raíces: bisección y regla falsa; interpretación geométrica' },
-    { id: ' subtema_2_2', title: '2.2 Métodos abiertos para la obtención de raíces: Newton-Raphson y método de la secante; interpretaciones geométricas y criterios de convergencia' },
+    { id: ' subtema_2_1', title: '2.1 Métodos cerrados para la obtención de raíces' },
+    { id: ' subtema_2_2', title: '2.2 Métodos abiertos para la obtención de raíces' },
     { id: ' subtema_2_3', title: '2.3 Implementación computacional en problemas de ingeniería' },
    
   ];

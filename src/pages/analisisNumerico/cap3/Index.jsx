@@ -4,15 +4,21 @@ import React from "react";
 import Subtema3_1 from "./subtema_3_1";
 import Subtema3_2 from "./subtema_3_2";
 import Subtema3_3 from "./subtema_3_3";
+import Subtema3_4 from "./subtema_3_4";
 
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
-    { id: ' subtema_3_1', title: '2.1 Métodos cerrados para la obtención de raíces: bisección y regla falsa; interpretación geométrica' },
-    { id: ' subtema_3_2', title: '2.2 Métodos abiertos para la obtención de raíces: Newton-Raphson y método de la secante; interpretaciones geométricas y criterios de convergencia' },
-    { id: ' subtema_3_3', title: '2.3 Implementación computacional en problemas de ingeniería' },
+    { id: ' subtema_3_1', title: '3.1 Eliminación Gaussiana con pivoteo y descomposición LU' },
+    { id: ' subtema_3_2', title: '3.2 Métodos iterativos: Jacobi y Gauss-Seidel' },
+    { id: ' subtema_3_3', title: '3.3 Método de las potencias' },
+    { id: ' subtema_3_4', title: '3.4 Implementación computacional en problemas de ingeniería' },
    
   ];
+
+
+
+
 
   return (
     <div className="container-fluid px-4">
@@ -24,7 +30,7 @@ export const Index = ({ activeSection, onSelectSection }) => {
             <div className="card-header bg-primary text-white p-3">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <span className="fw-bold">Análisis Numérico</span>
-                <span className="badge bg-warning text-dark">Cap&iacute;tulo 2</span>
+                <span className="badge bg-warning text-dark">Cap&iacute;tulo 3</span>
               </div>
               
             </div>
@@ -63,7 +69,7 @@ export const Index = ({ activeSection, onSelectSection }) => {
             {activeSection === 'cap3' && (
               <div>
                 <span className="badge bg-primary mb-2">Capítulo 3</span>
-                <h2 className="fw-bold text-dark">Resolución numérica de ecuaciones algebraicas y trascendentes  </h2>
+                <h2 className="fw-bold text-dark">Resolución numérica de sistemas de ecuaciones lineales  </h2>
                 <p className="text-muted mb-4">
                   Estudio de los errores de redondeo, truncamiento y la representación numérica en computadoras.
                 </p>
@@ -127,7 +133,8 @@ ecuaciones algebraicas y trascendentes, atendiendo a los criterios de convergenc
             {activeSection === ' subtema_3_1' && <Subtema3_1 />}
             {activeSection === ' subtema_3_2' && <Subtema3_2 />}
             {activeSection === ' subtema_3_3' && <Subtema3_3 />}
-            
+            {activeSection === ' subtema_3_4' && <Subtema3_4 />}
+           
 
             {/* Para subtemas que aún no tengan su archivo .jsx creado */}
             {activeSection !== 'cap3' && ![' subtema_3_1', ' subtema_3_2',' subtema_3_3'].includes(activeSection) && (

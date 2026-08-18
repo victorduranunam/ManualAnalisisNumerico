@@ -11,7 +11,7 @@ const Subtema_1_5 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">1.5 - Teoría de Errores</h4>
+        <h4 className="mb-0">1.5 - Aproximación de funciones por medio del polinomio de Taylor</h4>
       </Card.Header>
 
       <Card.Body>
