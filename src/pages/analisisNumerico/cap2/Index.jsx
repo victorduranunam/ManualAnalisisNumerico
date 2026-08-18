@@ -8,9 +8,9 @@ import Subtema2_3 from './subtema_2_3';
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
-    { id: 'subtema_2_1', title: '2.1 Métodos cerrados para la obtención de raíces: bisección y regla falsa; interpretación geométrica' },
-    { id: 'subtema_2_2', title: '2.2 Métodos abiertos para la obtención de raíces: Newton-Raphson y método de la secante; interpretaciones geométricas y criterios de convergencia' },
-    { id: 'subtema_2_3', title: '2.3 Implementación computacional en problemas de ingeniería' },
+    { id: ' subtema_2_1', title: '2.1 Métodos cerrados para la obtención de raíces: bisección y regla falsa; interpretación geométrica' },
+    { id: ' subtema_2_2', title: '2.2 Métodos abiertos para la obtención de raíces: Newton-Raphson y método de la secante; interpretaciones geométricas y criterios de convergencia' },
+    { id: ' subtema_2_3', title: '2.3 Implementación computacional en problemas de ingeniería' },
    
   ];
 
@@ -59,7 +59,7 @@ export const Index = ({ activeSection, onSelectSection }) => {
         <div className="col-md-9">
           <div className="bg-white p-4 rounded shadow-sm">
             
-            {/* VISTA GENERAL DEL CAPÍTULO 1 */}
+            {/* VISTA GENERAL DEL CAPÍTULO 2 */}
             {activeSection === 'cap2' && (
               <div>
                 <span className="badge bg-primary mb-2">Capítulo 2</span>
@@ -76,9 +76,8 @@ export const Index = ({ activeSection, onSelectSection }) => {
                         Objetivos de Aprendizaje
                       </h6>
                       <p className="small mb-0 text-secondary">
-                        Comprender la representación en punto flotante, los tipos de errores numéricos y los criterios de precisión,
-estabilidad y convergencia de métodos numéricos, relacionando estos conceptos con la precisión de los resultados en
-cálculos computacionales.
+                        Aplicar métodos numéricos, con apoyo de herramientas computacionales, para la resolución aproximada de
+ecuaciones algebraicas y trascendentes, atendiendo a los criterios de convergencia en problemas de ingeniería.
                       </p>
                     </div>
                   </div>
@@ -125,11 +124,13 @@ cálculos computacionales.
             )}
 
             {/* RENDERIZADO CONDICIONAL DE CADA SUBTEMA */}
-            {activeSection === 'subtema_1_1' && <Subtema1_1 />}
-            {activeSection === 'subtema_1_2' && <Subtema1_2 />}
+            {activeSection === ' subtema_2_1' && <Subtema2_1 />}
+            {activeSection === ' subtema_2_2' && <Subtema2_2 />}
+            {activeSection === ' subtema_2_3' && <Subtema2_3 />}
+            
 
             {/* Para subtemas que aún no tengan su archivo .jsx creado */}
-            {activeSection !== 'cap2' && !['subtema_2_1', 'subtema_2_2'].includes(activeSection) && (
+            {activeSection !== 'cap2' && ![' subtema_2_1', ' subtema_2_2',' subtema_2_3'].includes(activeSection) && (
               <div className="alert alert-light border">
                 <h5 className="text-primary"><i className="bi bi-journal-code me-2"></i>En desarrollo</h5>
                 <p className="mb-0 text-muted">
