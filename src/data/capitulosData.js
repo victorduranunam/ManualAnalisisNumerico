@@ -15,7 +15,7 @@ export const analisisNumericoData = [
     id: 'cap1',
     numero: 1,
     title: 'Capítulo 1',
-    descripcion: 'Contenido del capítulo 1 en desarrollo.',
+    descripcion: 'Fundamentos y errores en métodos numéricos',
     icon: 'bi-calculator',
     subtemas: buildSubtemas(1, 'Subtema')
   },
@@ -23,7 +23,7 @@ export const analisisNumericoData = [
     id: 'cap2',
     numero: 2,
     title: 'Capítulo 2',
-    descripcion: 'Contenido del capítulo 2 en desarrollo.',
+    descripcion: 'Resolución numérica de ecuaciones algebraicas y trascendentes',
     icon: 'bi-diagram-3',
     subtemas: buildSubtemas(2, 'Subtema')
   },
@@ -31,7 +31,7 @@ export const analisisNumericoData = [
     id: 'cap3',
     numero: 3,
     title: 'Capítulo 3',
-    descripcion: 'Contenido del capítulo 3 en desarrollo.',
+    descripcion: 'Resolución numérica de sistemas de ecuaciones lineales',
     icon: 'bi-grid-3x3',
     subtemas: buildSubtemas(3, 'Subtema')
   },
@@ -39,7 +39,7 @@ export const analisisNumericoData = [
     id: 'cap4',
     numero: 4,
     title: 'Capítulo 4',
-    descripcion: 'Contenido del capítulo 4 en desarrollo.',
+    descripcion: 'Interpolación, derivación e integración numéricas',
     icon: 'bi-graph-up',
     subtemas: buildSubtemas(4, 'Subtema')
   },
@@ -47,7 +47,7 @@ export const analisisNumericoData = [
     id: 'cap5',
     numero: 5,
     title: 'Capítulo 5',
-    descripcion: 'Contenido del capítulo 5 en desarrollo.',
+    descripcion: 'Resolución numérica de ecuaciones diferenciales',
     icon: 'bi-ui-checks',
     subtemas: buildSubtemas(5, 'Subtema')
   },
@@ -55,7 +55,7 @@ export const analisisNumericoData = [
     id: 'cap6',
     numero: 6,
     title: 'Capítulo 6',
-    descripcion: 'Contenido del capítulo 6 en desarrollo.',
+    descripcion: 'Estimación numérica mediante simulación ',
     icon: 'bi-activity',
     subtemas: buildSubtemas(6, 'Subtema')
   }

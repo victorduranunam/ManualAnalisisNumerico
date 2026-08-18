@@ -1,21 +1,16 @@
 import React from 'react';
 
 // Importaciones por defecto (coinciden con el export default de cada archivo)
-import Subtema1_1 from './subtema_1_1';
-import Subtema1_2 from './subtema_1_2';
-import Subtema1_3 from './subtema_1_3';
-import Subtema1_4 from './subtema_1_4';
-import Subtema1_5 from './subtema_1_5';
-import Subtema1_6 from './subtema_1_6';
+import Subtema2_1 from './subtema_2_1';
+import Subtema2_2 from './subtema_2_2';
+import Subtema2_3 from './subtema_2_3';
+
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
-    { id: 'subtema_1_1', title: '1.1 Importancia de los métodos numéricos en Ingeniería' },
-    { id: 'subtema_1_2', title: '1.2 Representación de números en punto flotante y sus limitaciones' },
-    { id: 'subtema_1_3', title: '1.3 Clasificación de los errores numéricos' },
-    { id: 'subtema_1_4', title: '1.4 Criterios fundamentales en métodos numéricos: precisión, estabilidad y convergencia' },
-    { id: 'subtema_1_5', title: '1.5 Aproximación de funciones por medio del polinomio de Taylor' },
-    { id: 'subtema_1_6', title: '1.6 Implementación y herramientas computacionales para métodos numéricos en Ingeniería' },
+    { id: 'subtema_2_1', title: '2.1 Métodos cerrados para la obtención de raíces: bisección y regla falsa; interpretación geométrica' },
+    { id: 'subtema_2_2', title: '2.2 Métodos abiertos para la obtención de raíces: Newton-Raphson y método de la secante; interpretaciones geométricas y criterios de convergencia' },
+    { id: 'subtema_2_3', title: '2.3 Implementación computacional en problemas de ingeniería' },
    
   ];
 
@@ -29,16 +24,16 @@ export const Index = ({ activeSection, onSelectSection }) => {
             <div className="card-header bg-primary text-white p-3">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <span className="fw-bold">Análisis Numérico</span>
-                <span className="badge bg-warning text-dark">Cap&iacute;tulo 1</span>
+                <span className="badge bg-warning text-dark">Cap&iacute;tulo 2</span>
               </div>
               
             </div>
             
             <div className="list-group list-group-flush">
               <button
-                onClick={() => onSelectSection('cap1')}
+                onClick={() => onSelectSection('cap2')}
                 className={`list-group-item list-group-item-action py-2 small text-start ${
-                  activeSection === 'cap1' ? 'active fw-bold' : 'text-secondary'
+                  activeSection === 'cap2' ? 'active fw-bold' : 'text-secondary'
                 }`}
               >
                 <i className="bi bi-house-door me-2"></i>
@@ -65,10 +60,10 @@ export const Index = ({ activeSection, onSelectSection }) => {
           <div className="bg-white p-4 rounded shadow-sm">
             
             {/* VISTA GENERAL DEL CAPÍTULO 1 */}
-            {activeSection === 'cap1' && (
+            {activeSection === 'cap2' && (
               <div>
-                <span className="badge bg-primary mb-2">Capítulo 1</span>
-                <h2 className="fw-bold text-dark">Fundamentos y errores en métodos numéricos </h2>
+                <span className="badge bg-primary mb-2">Capítulo 2</span>
+                <h2 className="fw-bold text-dark">Resolución numérica de ecuaciones algebraicas y trascendentes  </h2>
                 <p className="text-muted mb-4">
                   Estudio de los errores de redondeo, truncamiento y la representación numérica en computadoras.
                 </p>
@@ -132,13 +127,9 @@ cálculos computacionales.
             {/* RENDERIZADO CONDICIONAL DE CADA SUBTEMA */}
             {activeSection === 'subtema_1_1' && <Subtema1_1 />}
             {activeSection === 'subtema_1_2' && <Subtema1_2 />}
-            {activeSection === 'subtema_1_3' && <Subtema1_3 />}
-            {activeSection === 'subtema_1_4' && <Subtema1_4 />}
-            {activeSection === 'subtema_1_5' && <Subtema1_5 />}
-            {activeSection === 'subtema_1_6' && <Subtema1_6 />}
 
             {/* Para subtemas que aún no tengan su archivo .jsx creado */}
-            {activeSection !== 'cap1' && !['subtema_1_1', 'subtema_1_2', 'subtema_1_3', 'subtema_1_4', 'subtema_1_5', 'subtema_1_6'].includes(activeSection) && (
+            {activeSection !== 'cap2' && !['subtema_2_1', 'subtema_2_2'].includes(activeSection) && (
               <div className="alert alert-light border">
                 <h5 className="text-primary"><i className="bi bi-journal-code me-2"></i>En desarrollo</h5>
                 <p className="mb-0 text-muted">

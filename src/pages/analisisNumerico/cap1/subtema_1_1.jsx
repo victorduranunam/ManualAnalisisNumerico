@@ -13,7 +13,7 @@ export const Subtema1_1 = () => {
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
         <h4 className="mb-0">
-          1.1 Introducción a Python y su uso en el Análisis Numérico
+          1.1 Importancia de los métodos numéricos en Ingeniería
         </h4>
       </Card.Header>
 
