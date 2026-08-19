@@ -11,7 +11,7 @@ const Subtema_2_6 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">2.6 - Ecuaciones No Lineales</h4>
+        <h4 className="mb-0">2.6  Visual Studio Code <i className="bi bi-code-slash me-2"></i></h4>
       </Card.Header>
 
       <Card.Body>

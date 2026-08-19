@@ -12,7 +12,7 @@ const Subtema_2_1 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">2.1 Métodos de Intervalo (Búsqueda Incrementallll y Bisección)</h4>
+        <h4 className="mb-0">2.1 Herramientas de desarrollo python <i className="bi bi-gear-fill me-2"></i></h4>
       </Card.Header>
 
       <Card.Body>

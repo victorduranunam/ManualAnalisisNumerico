@@ -4,13 +4,21 @@ import React from 'react';
 import Subtema2_1 from './subtema_2_1';
 import Subtema2_2 from './subtema_2_2';
 import Subtema2_3 from './subtema_2_3';
+import Subtema2_4 from './subtema_2_4';
+import Subtema2_5 from './subtema_2_5';
+import Subtema2_6 from './subtema_2_6';
+import Subtema2_7 from './subtema_2_7';
 
 export const Index = ({ activeSection, onSelectSection }) => {
   // Configuración usando la sintaxis con guiones bajos (_1_1, _1_2, _1_3)
   const subtemas = [
-    { id: 'py_2_1', num: '2.1', title: '2.1 Introducción a Python y su uso en el Análisis Numérico' },
-    { id: 'py_2_2', num: '2.2', title: '2.2 Principios del desarrollo de programas en Python' },
-    { id: 'py_2_3', num: '2.3', title: '2.3 Aplicación en el Análisis Numérico' },
+    { id: 'py_2_1', num: '2.1', title: '2.1 Herramientas de desarrollo python' },
+    { id: 'py_2_2', num: '2.2', title: '2.2 Programación en la nube con Google Colab' },
+    { id: 'py_2_3', num: '2.3', title: '2.3 Programación desde Android con Pydroid 3' },
+    { id: 'py_2_4', num: '2.4', title: '2.4 Thonny' },
+    { id: 'py_2_5', num: '2.5', title: '2.5 Instalación de Python' },
+    { id: 'py_2_6', num: '2.6', title: '2.6 Visual Studio Code' },
+    { id: 'py_2_7', num: '2.7', title: '2.7 ¿Qué entorno utilizar?' },
   ];
 
   return (
@@ -26,7 +34,7 @@ export const Index = ({ activeSection, onSelectSection }) => {
                   <i className="bi bi-filetype-py me-2 text-warning"></i>
                   Python 
                 </span>
-                <span className="badge bg-warning text-dark">Módulo 1</span>
+                <span className="badge bg-warning text-dark">Módulo 2</span>
               </div>
             </div>
 
@@ -65,8 +73,8 @@ export const Index = ({ activeSection, onSelectSection }) => {
             {/* 1. VISTA GENERAL DE PYTHON CAPÍTULO 2 */}
             {activeSection === 'py_cap2' && (
               <div>
-                <span className="badge bg-success mb-2">Introducción a Python</span>
-                <h2 className="fw-bold text-dark">Capítulo 2: Fundamentos de Python</h2>
+                <span className="badge bg-success mb-2">Módulo 2</span>
+                <h2 className="fw-bold text-dark">Instalación y configuración del entorno de desarrollo</h2>
                 <p className="text-muted mb-4">
                 
                 Este primer módulo ofrece una visión general sobre la utilidad de Python como herramienta computacional en la ingeniería. A lo largo de la sección se muestra cómo la sencillez del lenguaje y sus librerías especializadas facilitan la aplicación del análisis numérico, convirtiéndolo en un entorno práctico para resolver ecuaciones, manipular matrices y graficar resultados.
@@ -132,6 +140,10 @@ export const Index = ({ activeSection, onSelectSection }) => {
             {activeSection === 'py_2_1' && <Subtema2_1 />}
             {activeSection === 'py_2_2' && <Subtema2_2 />}
             {activeSection === 'py_2_3' && <Subtema2_3 />}
+            {activeSection === 'py_2_4' && <Subtema2_4 />}
+            {activeSection === 'py_2_5' && <Subtema2_5 />}
+            {activeSection === 'py_2_6' && <Subtema2_6 />}
+            {activeSection === 'py_2_7' && <Subtema2_7 />}
 
           </div>
         </div>
