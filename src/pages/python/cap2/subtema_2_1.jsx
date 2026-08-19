@@ -1,40 +1,28 @@
-import React from "react";
-import { Tab, Nav, Card } from "react-bootstrap";
+import React from 'react';
+import SubtemaLayout from '../../../components/SubtemaLayout';
 
-// Importamos los subcomponentes de la pestaña
-import FundamentosTab from "./subtema_2_1_components/FundamentosTab";
-import VideosTab from "./subtema_2_1_components/VideosTab";
-import SimuladorTab from "./subtema_2_1_components/SimuladorTab";
-import EjerciciosTab from "./subtema_2_1_components/EjerciciosTab";
-import CuestionarioTab from "./subtema_2_1_components/CuestionarioTab";
+// Importaciones de los subcomponentes del Subtema 2.1
+import FundamentosTab from './subtema_2_1_components/FundamentosTab';
+import VideosTab from './subtema_2_1_components/VideosTab';
+import SimuladorTab from './subtema_2_1_components/SimuladorTab';
+import EjerciciosTab from './subtema_2_1_components/EjerciciosTab';
+import CuestionarioTab from './subtema_2_1_components/CuestionarioTab';
 
-const Subtema_2_1 = () => {
+export const Subtema_2_1 = () => {
   return (
-    <Card className="shadow-sm border-0 mb-4">
-      <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">2.1 Herramientas de desarrollo python <i className="bi bi-gear-fill me-2"></i></h4>
-      </Card.Header>
-
-      <Card.Body>
-        <Tab.Container id="subtema-2-1-tabs" defaultActiveKey="fundamentos">
-          <Nav variant="tabs" className="mb-3">
-            <Nav.Item><Nav.Link eventKey="fundamentos">Fundamentos</Nav.Link></Nav.Item>
-            <Nav.Item><Nav.Link eventKey="videos">Videos de Apoyo</Nav.Link></Nav.Item>
-            <Nav.Item><Nav.Link eventKey="simulador">Simulador</Nav.Link></Nav.Item>
-            <Nav.Item><Nav.Link eventKey="ejercicios">Ejercicios</Nav.Link></Nav.Item>
-            <Nav.Item><Nav.Link eventKey="cuestionario">Cuestionario</Nav.Link></Nav.Item>
-          </Nav>
-
-          <Tab.Content>
-            <Tab.Pane eventKey="fundamentos"><FundamentosTab /></Tab.Pane>
-            <Tab.Pane eventKey="videos"><VideosTab /></Tab.Pane>
-            <Tab.Pane eventKey="simulador"><SimuladorTab /></Tab.Pane>
-            <Tab.Pane eventKey="ejercicios"><EjerciciosTab /></Tab.Pane>
-            <Tab.Pane eventKey="cuestionario"><CuestionarioTab /></Tab.Pane>
-          </Tab.Content>
-        </Tab.Container>
-      </Card.Body>
-    </Card>
+    <SubtemaLayout
+      titulo={
+        <>
+          2.1 Herramientas de desarrollo python <i className="bi bi-gear-fill ms-2"></i>
+        </>
+      }
+      headerBg="dark"
+      fundamentos={<FundamentosTab />}
+      videos={<VideosTab />}
+      simulador={<SimuladorTab />}
+      ejercicios={<EjerciciosTab />}
+      cuestionario={<CuestionarioTab />}
+    />
   );
 };
 
