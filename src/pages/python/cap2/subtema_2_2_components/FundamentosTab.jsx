@@ -31,7 +31,7 @@ const Tema22 = () => {
           <li>
             En el navegador de su preferencia Iniciar sesión con una cuenta de Google.
             <div className="my-3 text-center">
-              <img src="/images/Python/cap2/colab_01.png" alt="Google Login" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
+              <img src="images/Python/cap2/colab_01.png" alt="Google Login" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
             </div>
           </li>
           <li>
@@ -47,7 +47,7 @@ const Tema22 = () => {
   )
   <div className="my-3 text-center">
     <img 
-      src="/images/Python/cap2/colab_02.png" 
+      src="images/Python/cap2/colab_02.png" 
       alt="Google Colab Interface" 
       className="img-fluid border rounded shadow-sm" 
       style={{ maxHeight: '250px' }} 
@@ -57,13 +57,13 @@ const Tema22 = () => {
           <li>
             Crear un nuevo cuaderno (Notebook) y escribir algunas líneas de código.
             <div className="my-3 text-center">
-              <img src="/images/Python/cap2/colab_03.png" alt="Nuevo cuaderno Colab" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '200px' }} />
+              <img src="images/Python/cap2/colab_03.png" alt="Nuevo cuaderno Colab" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '200px' }} />
             </div>
           </li>
           <li>
             Ejecutar cada celda mediante el botón Run o presionando Shift + Enter.
             <div className="my-3 text-center">
-              <img src="/images/Python/cap2/colab_04.png" alt="Ejecución de celda Colab" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '200px' }} />
+              <img src="images/Python/cap2/colab_04.png" alt="Ejecución de celda Colab" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '200px' }} />
             </div>
           </li>
         </ol>
@@ -72,7 +72,7 @@ const Tema22 = () => {
         La ventaja de manejar los programas con Google Colab, es que se pueden ir metiendo bloques de texto que nos permiten agregar comentarios a nuestro código y de esta forma ir documentando nuestros programas.
       </p>
       <div className="my-3 text-center">
-        <img src="/images/Python/cap2/colab_05.png" alt="Bloques de texto Colab" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
+        <img src="images/Python/cap2/colab_05.png" alt="Bloques de texto Colab" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
       </div>
       <p className="text-secondary">
         Google Colab representa una excelente alternativa para quienes desean comenzar a programar sin modificar la configuración de una computadora o que lleguen a trabajar frecuentemente en lugar de públicos como salas de cómputo.

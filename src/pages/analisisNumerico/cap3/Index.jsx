@@ -9,10 +9,10 @@ import Subtema3_4 from "./subtema_3_4";
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
-    { id: ' subtema_3_1', title: '3.1 Eliminación Gaussiana con pivoteo y descomposición LU' },
-    { id: ' subtema_3_2', title: '3.2 Métodos iterativos: Jacobi y Gauss-Seidel' },
-    { id: ' subtema_3_3', title: '3.3 Método de las potencias' },
-    { id: ' subtema_3_4', title: '3.4 Implementación computacional en problemas de ingeniería' },
+    { id: 'subtema_3_1', title: '3.1 Eliminación Gaussiana con pivoteo y descomposición LU' },
+    { id: 'subtema_3_2', title: '3.2 Métodos iterativos: Jacobi y Gauss-Seidel' },
+    { id: 'subtema_3_3', title: '3.3 Método de las potencias' },
+    { id: 'subtema_3_4', title: '3.4 Implementación computacional en problemas de ingeniería' },
    
   ];
 
@@ -22,12 +22,36 @@ export const Index = ({ activeSection, onSelectSection }) => {
 
   return (
     <div className="container-fluid px-4">
+      {/* 📱 SELECTOR RESPONSIVE PARA MÓVILES */}
+      <div className="d-block d-md-none mb-3">
+        <div className="card shadow-sm border-0">
+          <div className="card-body p-3">
+            <label className="fw-bold small mb-2 text-dark">
+              <i className="bi bi-journal-bookmark-fill me-2 text-primary"></i>
+              Navegar en Capítulo 3:
+            </label>
+            <select
+              value={activeSection}
+              onChange={(e) => onSelectSection(e.target.value)}
+              className="form-select fw-bold border-secondary"
+            >
+              <option value="cap3">📋 Vista General del Capítulo</option>
+              {subtemas.map((st) => (
+                <option key={st.id} value={st.id}>
+                  📌 {st.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div className="row g-4">
         
         {/* ================= MENÚ LATERAL AZUL ================= */}
-        <div className="col-md-3">
-          <div className="card border-0 shadow-sm overflow-hidden">
-            <div className="card-header bg-primary text-white p-3">
+        <div className="col-md-3 d-none d-md-block">
+          <div className="card border-0 shadow-sm overflow-hidden sticky-top" style={{ top: "80px" }}>
+            <div className="card-header bg-unam text-white p-3">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <span className="fw-bold">Análisis Numérico</span>
                 <span className="badge bg-warning text-dark">Cap&iacute;tulo 3</span>
@@ -65,7 +89,7 @@ export const Index = ({ activeSection, onSelectSection }) => {
         <div className="col-md-9">
           <div className="bg-white p-4 rounded shadow-sm">
             
-            {/* VISTA GENERAL DEL CAPÍTULO 2 */}
+            {/* VISTA GENERAL DEL CAPÍTULO 3 */}
             {activeSection === 'cap3' && (
               <div>
                 <span className="badge bg-primary mb-2">Capítulo 3</span>
@@ -130,14 +154,14 @@ ecuaciones algebraicas y trascendentes, atendiendo a los criterios de convergenc
             )}
 
             {/* RENDERIZADO CONDICIONAL DE CADA SUBTEMA */}
-            {activeSection === ' subtema_3_1' && <Subtema3_1 />}
-            {activeSection === ' subtema_3_2' && <Subtema3_2 />}
-            {activeSection === ' subtema_3_3' && <Subtema3_3 />}
-            {activeSection === ' subtema_3_4' && <Subtema3_4 />}
+            {activeSection === 'subtema_3_1' && <Subtema3_1 />}
+            {activeSection === 'subtema_3_2' && <Subtema3_2 />}
+            {activeSection === 'subtema_3_3' && <Subtema3_3 />}
+            {activeSection === 'subtema_3_4' && <Subtema3_4 />}
            
 
             {/* Para subtemas que aún no tengan su archivo .jsx creado */}
-            {activeSection !== 'cap3' && ![' subtema_3_1', ' subtema_3_2',' subtema_3_3'].includes(activeSection) && (
+            {activeSection !== 'cap3' && !['subtema_3_1', 'subtema_3_2', 'subtema_3_3', 'subtema_3_4'].includes(activeSection) && (
               <div className="alert alert-light border">
                 <h5 className="text-primary"><i className="bi bi-journal-code me-2"></i>En desarrollo</h5>
                 <p className="mb-0 text-muted">

@@ -15,18 +15,42 @@ export const Index = ({ activeSection, onSelectSection }) => {
 
   return (
     <div className="container-fluid px-4">
+      {/* 📱 SELECTOR RESPONSIVE PARA MÓVILES */}
+      <div className="d-block d-md-none mb-3">
+        <div className="card shadow-sm border-0">
+          <div className="card-body p-3">
+            <label className="fw-bold small mb-2 text-dark">
+              <i className="bi bi-filetype-py me-2 text-success"></i>
+              Navegar en Módulo 7:
+            </label>
+            <select
+              value={activeSection}
+              onChange={(e) => onSelectSection(e.target.value)}
+              className="form-select fw-bold border-secondary"
+            >
+              <option value="py_cap7">📋 Vista General del Módulo</option>
+              {subtemas.map((st) => (
+                <option key={st.id} value={st.id}>
+                  📌 {st.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div className="row g-4">
         
         {/* ================= MENÚ LATERAL PYTHON ================= */}
-        <div className="col-md-3">
-          <div className="card border-0 shadow-sm overflow-hidden">
+        <div className="col-md-3 d-none d-md-block">
+          <div className="card border-0 shadow-sm overflow-hidden sticky-top" style={{ top: "80px" }}>
             <div className="card-header bg-dark text-white p-3">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <span className="fw-bold">
                   <i className="bi bi-filetype-py me-2 text-warning"></i>
                   Python 
                 </span>
-                <span className="badge bg-warning text-dark">Módulo 1</span>
+                <span className="badge bg-warning text-dark">Módulo 7</span>
               </div>
             </div>
 

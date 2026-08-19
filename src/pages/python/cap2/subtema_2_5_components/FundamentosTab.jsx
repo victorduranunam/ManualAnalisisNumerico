@@ -13,7 +13,7 @@ const Tema25 = () => {
         La distribución oficial puede descargarse desde: <code>https://www.python.org</code>
       </p>
       <div className="my-3 text-center">
-        <img src="/images/Python/cap2/python_01.png" alt="Python Releases for Windows" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
+        <img src="images/Python/cap2/python_01.png" alt="Python Releases for Windows" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
       </div>
       <Alert variant="info" className="border-0 shadow-sm my-4 p-4">
         <h6 className="fw-bold mb-2">

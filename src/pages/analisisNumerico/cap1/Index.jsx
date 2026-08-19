@@ -21,12 +21,36 @@ export const Index = ({ activeSection, onSelectSection }) => {
 
   return (
     <div className="container-fluid px-4">
+      {/* 📱 SELECTOR RESPONSIVE PARA MÓVILES */}
+      <div className="d-block d-md-none mb-3">
+        <div className="card shadow-sm border-0">
+          <div className="card-body p-3">
+            <label className="fw-bold small mb-2 text-dark">
+              <i className="bi bi-journal-bookmark-fill me-2 text-primary"></i>
+              Navegar en Capítulo 1:
+            </label>
+            <select
+              value={activeSection}
+              onChange={(e) => onSelectSection(e.target.value)}
+              className="form-select fw-bold border-secondary"
+            >
+              <option value="cap1">📋 Vista General del Capítulo</option>
+              {subtemas.map((st) => (
+                <option key={st.id} value={st.id}>
+                  📌 {st.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div className="row g-4">
         
         {/* ================= MENÚ LATERAL AZUL ================= */}
-        <div className="col-md-3">
-          <div className="card border-0 shadow-sm overflow-hidden">
-            <div className="card-header bg-primary text-white p-3">
+        <div className="col-md-3 d-none d-md-block">
+          <div className="card border-0 shadow-sm overflow-hidden sticky-top" style={{ top: "80px" }}>
+            <div className="card-header bg-unam text-white p-3">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <span className="fw-bold">Análisis Numérico</span>
                 <span className="badge bg-warning text-dark">Cap&iacute;tulo 1</span>

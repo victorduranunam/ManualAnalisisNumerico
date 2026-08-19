@@ -12,7 +12,7 @@ function NavigationBar({ activeSection, onSelectSection }) {
     <Navbar 
       bg="dark" 
       variant="dark" 
-      expand="xl" 
+      expand="md" 
       className="shadow-sm sticky-top"
       style={{ zIndex: 1050 }}
     >

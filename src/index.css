@@ -25,3 +25,8 @@ body {
   border-color: #0d6efd !important;
   font-weight: 600;
 }
+
+/* Color azul marino institucional UNAM */
+.bg-unam {
+  background-color: #002b49 !important;
+}

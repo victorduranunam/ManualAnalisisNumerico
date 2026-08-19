@@ -65,18 +65,19 @@ export const analisisNumericoData = [
   }
 ];
 
-// Generador de subtemas para Python (IDs estilo py_1_1)
+// Generador de subtemas para Python (IDs estilo subtema_1_1)
 const buildPythonSubtemas = (capNumero) => [
-  { id: `py_${capNumero}_1`, title: `Subtema ${capNumero}.1` },
-  { id: `py_${capNumero}_2`, title: `Subtema ${capNumero}.2` },
-  { id: `py_${capNumero}_3`, title: `Subtema ${capNumero}.3` },
-  { id: `py_${capNumero}_4`, title: `Subtema ${capNumero}.4` },
-  { id: `py_${capNumero}_5`, title: `Subtema ${capNumero}.5` },
-  { id: `py_${capNumero}_6`, title: `Subtema ${capNumero}.6` },
-  { id: `py_${capNumero}_7`, title: `Subtema ${capNumero}.7` },
-  { id: `py_${capNumero}_8`, title: `Subtema ${capNumero}.8` },
-  { id: `py_${capNumero}_9`, title: `Subtema ${capNumero}.9` },
-  { id: `py_${capNumero}_10`, title: `Subtema ${capNumero}.10` },
+  { id: `subtema_${capNumero}_1`, title: `Subtema ${capNumero}.1` },
+  { id: `subtema_${capNumero}_2`, title: `Subtema ${capNumero}.2` },
+  { id: `subtema_${capNumero}_3`, title: `Subtema ${capNumero}.3` },
+  { id: `subtema_${capNumero}_4`, title: `Subtema ${capNumero}.4` },
+  { id: `subtema_${capNumero}_5`, title: `Subtema ${capNumero}.5` },
+  { id: `subtema_${capNumero}_6`, title: `Subtema ${capNumero}.6` },
+  { id: `subtema_${capNumero}_7`, title: `Subtema ${capNumero}.7` },
+  { id: `subtema_${capNumero}_8`, title: `Subtema ${capNumero}.8` },
+  { id: `subtema_${capNumero}_9`, title: `Subtema ${capNumero}.9` },
+  { id: `subtema_${capNumero}_10`, title: `Subtema ${capNumero}.10` },
+
 ];
 
 // ARREGLO COMPLETO CON LOS 10 CAPÍTULOS DE PYTHON

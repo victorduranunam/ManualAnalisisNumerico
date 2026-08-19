@@ -15,7 +15,7 @@ const Tema24 = () => {
         Thonny puede ser descargado de la siguiente dirección: <code>https://thonny.org/</code>
       </p>
       <div className="my-3 text-center">
-        <img src="/images/Python/cap2/thonny_01.png" alt="Descargar Thonny" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
+        <img src="images/Python/cap2/thonny_01.png" alt="Descargar Thonny" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
       </div>
       <p className="text-secondary">
         Entre sus características destacan:
@@ -43,7 +43,7 @@ const Tema24 = () => {
         <strong>Consola o intérprete de Python (parte inferior izquierda):</strong> aquí se muestra el resultado de la ejecución de nuestros programas. Por ejemplo, si el programa imprime un mensaje en pantalla, este aparecerá en esta ventana. Además, también podemos escribir y ejecutar instrucciones de Python de forma inmediata, sin necesidad de crear un archivo.
       </p>
       <div className="my-3 text-center">
-        <img src="/images/Python/cap2/thonny_02.png" alt="Interfaz de Thonny" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '300px' }} />
+        <img src="images/Python/cap2/thonny_02.png" alt="Interfaz de Thonny" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '300px' }} />
       </div>
     </div>
   );

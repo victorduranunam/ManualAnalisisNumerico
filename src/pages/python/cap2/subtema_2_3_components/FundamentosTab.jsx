@@ -24,7 +24,7 @@ const Tema23 = () => {
         La instalación consiste simplemente en descargar la aplicación desde Google Play e instalar los paquetes adicionales cuando sean requeridos.
       </p>
       <div className="my-3 text-center">
-        <img src="/images/Python/cap2/pydroid_01.png" alt="Pydroid 3 Google Play" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
+        <img src="images/Python/cap2/pydroid_01.png" alt="Pydroid 3 Google Play" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
       </div>
       <p className="text-secondary">
         Una vez instalado Pydroid, se puede abrir como cualquier otra aplicación de Android. Al iniciarlo, se mostrará la pantalla principal, la cual está compuesta por diferentes áreas: la barra de menús, el editor de código, donde se escribirán los programas, y el teclado virtual del dispositivo, que permitirá ingresar las instrucciones.
@@ -36,13 +36,13 @@ const Tema23 = () => {
         Para ejecutar un programa, se debe presionar el botón amarillo ubicado en la parte inferior de la ventana del editor de código. Al hacerlo, Pydroid ejecutará las instrucciones escritas y mostrará el resultado correspondiente.
       </p>
       <div className="my-3 text-center">
-        <img src="/images/Python/cap2/pydroid_02.png" alt="Editor Pydroid 3" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '300px' }} />
+        <img src="images/Python/cap2/pydroid_02.png" alt="Editor Pydroid 3" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '300px' }} />
       </div>
       <p className="text-secondary">
         Al ejecutar el programa se abrirá otra ventana en la cual se mostrará el resultado.
       </p>
       <div className="my-3 text-center">
-        <img src="/images/Python/cap2/pydroid_03.png" alt="Resultado Pydroid 3" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
+        <img src="images/Python/cap2/pydroid_03.png" alt="Resultado Pydroid 3" className="img-fluid border rounded shadow-sm" style={{ maxHeight: '250px' }} />
       </div>
     </div>
   );
