@@ -20,8 +20,11 @@ print("Solución del sistema:", x)`;
         Modifica y ejecuta el siguiente código Python para resolver el ejercicio interactivo:
       </p>
 
-      {/* Componente del Editor */}
-      <PythonEditor codigoInicial={codigoInicial} />
+      {/* Componente del Editor con altura compacta ajustada */}
+      <PythonEditor 
+        codigoInicial={codigoInicial} 
+        altura="100px" 
+      />
     </div>
   );
 };

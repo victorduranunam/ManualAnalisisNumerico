@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 
-export default function PythonEditor({ codigoInicial = '# Escribe tu código Python aquí\nimport numpy as np\nprint("¡Hola desde la UNAM!")' }) {
+export default function PythonEditor({ 
+  codigoInicial = '# Escribe tu código Python aquí\nimport numpy as np\nprint("¡Hola desde la UNAM!")',
+  altura = '220px' // Permite ajustar el alto desde el componente padre
+}) {
   const [code, setCode] = useState(codigoInicial);
   const [output, setOutput] = useState('');
   const [plotImage, setPlotImage] = useState(null);
@@ -9,7 +12,7 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
   const [loading, setLoading] = useState(true);
   const [statusText, setStatusText] = useState('Iniciando motor Python...');
 
-  // Inicializar Pyodide cargado desde index.html
+  // Inicializar Pyodide cargado previamente desde index.html
   useEffect(() => {
     async function initPyodide() {
       if (window.loadPyodide && !pyodide) {
@@ -27,7 +30,7 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
     initPyodide();
   }, [pyodide]);
 
-  // Actualizar el código local si la prop cambia desde el componente padre
+  // Sincronizar el estado del código si la prop codigoInicial cambia desde React
   useEffect(() => {
     setCode(codigoInicial);
   }, [codigoInicial]);
@@ -40,7 +43,7 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
     setOutput('Cargando librerías y ejecutando...');
 
     try {
-      // 1. Cargar librerías bajo demanda según el código importado
+      // 1. Cargar librerías necesarias dinámicamente según lo importado en el código
       const packagesToLoad = [];
       if (code.includes('numpy') || code.includes('np.')) packagesToLoad.push('numpy');
       if (code.includes('sympy') || code.includes('sp.')) packagesToLoad.push('sympy');
@@ -53,13 +56,12 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
 
       setStatusText('Ejecutando script...');
 
-      // 2. Configurar captura de texto (stdout) y captura de gráficos (Matplotlib)
+      // 2. Redirigir consola (stdout) y preparar el backend gráfico de Matplotlib
       await pyodide.runPythonAsync(`
         import sys
         import io
         sys.stdout = io.StringIO()
 
-        # Configurar backend de Matplotlib si está importado
         if 'matplotlib' in sys.modules:
             import matplotlib
             matplotlib.use('module://matplotlib.backends.html5_canvas')
@@ -68,10 +70,10 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
             plt.close('all')
       `);
 
-      // 3. Ejecutar el código del usuario
+      // 3. Ejecutar el código Python escrito por el usuario
       await pyodide.runPythonAsync(code);
 
-      // 4. Extraer gráficos si se usó plt.show()
+      // 4. Capturar gráficas generadas con Matplotlib (si aplica)
       const hasPlot = await pyodide.runPythonAsync(`
         import base64
         img_str = ""
@@ -91,7 +93,7 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
         setPlotImage(`data:image/png;base64,${hasPlot}`);
       }
 
-      // 5. Extraer la salida de texto (print)
+      // 5. Capturar impresiones de consola (print)
       const stdout = pyodide.runPython('sys.stdout.getvalue()');
       setOutput(stdout || (hasPlot ? 'Gráfica generada con éxito.' : 'Ejecutado correctamente (sin salida de texto).'));
 
@@ -106,8 +108,8 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
   return (
     <div className="card shadow-sm my-3 border-0">
       {/* Encabezado del Editor */}
-      <div className="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-        <span className="fw-bold">
+      <div className="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+        <span className="fw-bold small">
           <i className="bi bi-code-slash me-2 text-warning"></i>Editor Interactivo de Python
         </span>
         <button 
@@ -119,10 +121,10 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
         </button>
       </div>
 
-      {/* Cuerpo con Monaco Editor */}
+      {/* Monaco Editor con altura dinámicamente personalizable */}
       <div className="card-body p-0">
         <Editor
-          height="340px"
+          height={altura}
           defaultLanguage="python"
           theme="vs-dark"
           value={code}
@@ -130,24 +132,29 @@ export default function PythonEditor({ codigoInicial = '# Escribe tu código Pyt
           options={{
             minimap: { enabled: false },
             automaticLayout: true,
-            fontSize: 14,
+            fontSize: 13,
             scrollBeyondLastLine: false,
           }}
         />
       </div>
 
-      {/* Salida de Gráficos (Matplotlib) */}
+      {/* Render de Gráficas de Matplotlib */}
       {plotImage && (
-        <div className="card-body bg-white text-center border-top">
-          <h6 className="text-secondary mb-2 fw-bold">Gráfica Generada:</h6>
-          <img src={plotImage} alt="Gráfica de Matplotlib" className="img-fluid rounded border shadow-sm" style={{ maxHeight: '350px' }} />
+        <div className="card-body bg-white text-center border-top p-2">
+          <small className="text-secondary d-block mb-1 fw-bold">Gráfica Generada:</small>
+          <img 
+            src={plotImage} 
+            alt="Gráfica de Matplotlib" 
+            className="img-fluid rounded border shadow-sm" 
+            style={{ maxHeight: '280px' }} 
+          />
         </div>
       )}
 
       {/* Consola de Salida de Texto */}
-      <div className="card-footer bg-black text-warning font-monospace p-3">
-        <small className="d-block text-secondary mb-1">Consola / Salida:</small>
-        <pre className="m-0" style={{ whiteSpace: 'pre-wrap', maxHeight: '200px', overflowY: 'auto' }}>
+      <div className="card-footer bg-black text-warning font-monospace p-2">
+        <small className="d-block text-secondary mb-1" style={{ fontSize: '11px' }}>Consola / Salida:</small>
+        <pre className="m-0 small" style={{ whiteSpace: 'pre-wrap', maxHeight: '150px', overflowY: 'auto' }}>
           {output || '// Presiona "Ejecutar" para procesar el código'}
         </pre>
       </div>
