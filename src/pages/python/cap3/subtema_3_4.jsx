@@ -11,7 +11,7 @@ const Subtema_3_4 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">3.4 - Sistemas de Ecuaciones</h4>
+        <h4 className="mb-0">3.4 Conversión de datos </h4>
       </Card.Header>
 
       <Card.Body>

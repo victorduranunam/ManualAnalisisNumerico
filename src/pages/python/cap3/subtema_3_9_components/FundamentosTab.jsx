@@ -26,7 +26,7 @@ const FundamentosTab = () => {
 
       <div className="my-3 text-center">
         <img
-          src="images/Python/cap3/ejecucion_ejemplo_completo.png"
+          src="images/Python/cap3/cap39A.png"
           alt="Ejecución del programa completo en terminal"
           className="img-fluid border rounded shadow-sm"
           style={{ maxHeight: '200px' }}

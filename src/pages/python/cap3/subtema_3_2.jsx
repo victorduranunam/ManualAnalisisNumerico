@@ -13,7 +13,7 @@ const Subtema3_2 = () => {
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
         <h4 className="mb-0">
-          3.2 Introducción a Python y su uso en el Análisis Numérico
+          3.2 Utilización de variables  
         </h4>
       </Card.Header>
 

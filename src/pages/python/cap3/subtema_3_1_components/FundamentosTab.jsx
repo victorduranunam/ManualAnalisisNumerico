@@ -34,7 +34,7 @@ const FundamentosTab = () => {
 
       <div className="my-3 text-center">
         <img
-          src="images/Python/cap3/menu_terminal_vscode.png"
+          src="images/Python/cap3/cap31A.png"
           alt="Menú Terminal en Visual Studio Code"
           className="img-fluid border rounded shadow-sm"
           style={{ maxHeight: '250px' }}
@@ -51,7 +51,7 @@ const FundamentosTab = () => {
 
       <div className="my-3 text-center">
         <img
-          src="images/Python/cap3/pip_install_numpy.png"
+          src="images/Python/cap3/cap31B.png"
           alt="Comando pip install numpy en terminal"
           className="img-fluid border rounded shadow-sm"
           style={{ maxHeight: '250px' }}
