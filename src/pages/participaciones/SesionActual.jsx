@@ -13,7 +13,9 @@ export default function SesionActual() {
 
   // Ruta apuntando a la subcarpeta pública del servidor PHP
   //const API_URL = './public/api/registrar_participacion.php';
-  const API_URL = './api/registrar_participacion.php';
+//  const API_URL = './api/registrar_participacion.php';
+// Ruta absoluta apuntando a la subcarpeta public/api/
+  const API_URL = '/victord/ManualAnalisisNumerico/public/api/registrar_participacion.php';
 
   const codigoPruebasInicial = `# Zona de Borrador / Pruebas Libres
 import numpy as np
