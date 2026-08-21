@@ -4,26 +4,19 @@ import PythonEditor from '../../components/PythonEditor';
 export default function SesionActual() {
   const [numeroCuenta, setNumeroCuenta] = useState('');
   
-  // Estados para capturar el código y la salida de la ENTREGA OFICIAL
+  // Captura de código y salida de terminal únicas
   const [codigoOficial, setCodigoOficial] = useState('');
   const [terminalOficial, setTerminalOficial] = useState('');
   
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
 
-  // Ruta absoluta apuntando a la subcarpeta public/api/
   const API_URL = '/victord/ManualAnalisisNumerico/public/api/registrar_participacion.php';
 
-  const codigoPruebasInicial = `# Zona de Borrador / Pruebas Libres
+  const codigoInicial = `# Participación Oficial de la Clase
 import numpy as np
 
-# Usa este espacio para hacer pruebas antes de redactar tu entrega
-print("Probando algoritmo...")`;
-
-  const codigoOficialInicial = `# Participación Oficial de la Clase
-import numpy as np
-
-# Escribe aquí la solución final que será evaluada
+# Escribe aquí la solución del ejercicio y presiona ▶ Ejecutar
 print("Entrega de participación")`;
 
   const handleEnviarParticipacion = async (e) => {
@@ -31,8 +24,7 @@ print("Entrega de participación")`;
 
     const terminalLimpia = terminalOficial.trim().toLowerCase();
 
-    // 1. Validar que la terminal de la Entrega Oficial SE HAYA EJECUTADO
-    // Bloquea si está vacía o si contiene el texto predeterminado sin ejecutar
+    // 1. Validar que la terminal SE HAYA EJECUTADO
     if (
       !terminalLimpia || 
       terminalLimpia.includes('presiona') || 
@@ -41,7 +33,7 @@ print("Entrega de participación")`;
     ) {
       setMensaje({ 
         tipo: 'warning', 
-        texto: 'Es obligatorio presionar el botón "▶ Ejecutar" en la ventana de Entrega Oficial antes de enviar.' 
+        texto: 'Es obligatorio presionar el botón "▶ Ejecutar" en el editor antes de enviar.' 
       });
       return;
     }
@@ -50,7 +42,7 @@ print("Entrega de participación")`;
     if (!codigoOficial.trim()) {
       setMensaje({ 
         tipo: 'danger', 
-        texto: 'El código de la Entrega Oficial no puede estar vacío.' 
+        texto: 'El código de Python no puede estar vacío.' 
       });
       return;
     }
@@ -112,52 +104,37 @@ print("Entrega de participación")`;
       <div className="card shadow-sm border-0 mb-4">
         <div className="card-body p-4">
           
-          {/* Instrucciones */}
+          {/* Banner de Instrucciones */}
           <div className="alert alert-primary border-0 d-flex align-items-center mb-4" role="alert">
             <i className="bi bi-info-circle-fill fs-4 me-3"></i>
             <div>
               <h5 className="alert-heading fw-bold mb-1">Registro de Participación de la Clase</h5>
               <p className="mb-0">
-                Escribe tu código en la sección oficial, presiona <strong>▶ Ejecutar</strong> para generar la salida en consola e ingresa tu número de cuenta al final para registrar tu entrega.
+                Escribe tu código, presiona <strong>▶ Ejecutar</strong> para validar la salida en consola e ingresa tu número de cuenta para registrar tu entrega.
               </p>
             </div>
           </div>
 
           <form onSubmit={handleEnviarParticipacion}>
             
-            {/* 1. Área de Borrador */}
-            <div className="mb-5 p-3 bg-light rounded border">
-              <h6 className="fw-bold text-secondary mb-1">
-                <i className="bi bi-pencil-square me-2"></i>
-                Área de Pruebas Libres / Borrador
-              </h6>
-              <small className="text-muted d-block mb-2">
-                Espacio de pruebas. Las ejecuciones en este bloque no se guardan en el servidor.
-              </small>
-              <PythonEditor
-                codigoInicial={codigoPruebasInicial}
-                lineasVisibles={5}
-              />
-            </div>
-
-            {/* 2. Entrega Oficial */}
+            {/* Editor Único de Python */}
             <div className="mb-4 p-3 bg-white rounded border border-2 border-primary shadow-sm">
               <h5 className="fw-bold text-primary mb-1">
-                <i className="bi bi-check-circle-fill me-2"></i>
-                Entrega Oficial de Participación <span className="text-danger">*</span>
+                <i className="bi bi-code-slash me-2"></i>
+                Editor de Código de Participación <span className="text-danger">*</span>
               </h5>
               <small className="text-muted d-block mb-2">
                 <strong>Indispensable:</strong> Presiona "▶ Ejecutar" en este editor antes de enviar para capturar la salida de la terminal.
               </small>
               <PythonEditor
-                codigoInicial={codigoOficialInicial}
-                lineasVisibles={8}
+                codigoInicial={codigoInicial}
+                lineasVisibles={10}
                 onCodeChange={(val) => setCodigoOficial(val)}
                 onOutputChange={(val) => setTerminalOficial(val)}
               />
             </div>
 
-            {/* Campo de Número de Cuenta (Al final de las ventanas) */}
+            {/* Campo de Número de Cuenta */}
             <div className="card bg-light border-0 p-3 mb-4">
               <div className="row align-items-center">
                 <div className="col-md-6">
@@ -182,7 +159,7 @@ print("Entrega de participación")`;
               </div>
             </div>
 
-            {/* Retroalimentación al usuario */}
+            {/* Alert de Retroalimentación */}
             {mensaje && (
               <div className={`alert alert-${mensaje.tipo} alert-dismissible fade show my-3`} role="alert">
                 {mensaje.texto}
@@ -190,11 +167,11 @@ print("Entrega de participación")`;
               </div>
             )}
 
-            {/* Botón de Guardado */}
+            {/* Botón de Envío */}
             <div className="d-flex justify-content-end mt-4">
               <button
                 type="submit"
-                className="btn btn-primary btn-lg shadow-sm font-semibold"
+                className="btn btn-primary btn-lg shadow-sm fw-semibold"
                 disabled={enviando}
               >
                 {enviando ? (

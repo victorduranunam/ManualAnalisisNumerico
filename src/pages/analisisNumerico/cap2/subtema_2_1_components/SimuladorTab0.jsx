@@ -3,9 +3,6 @@ import Plot from 'react-plotly.js';
 import { evaluate } from 'mathjs';
 
 const SimuladorTab = () => {
-  // Estado para la vista: 'menu' (selección) o 'simulador' (interactivo)
-  const [metodoSeleccionado, setMetodoSeleccionado] = useState(null); // 'biseccion' | 'regla_falsa'
-
   // Parámetros de entrada
   const [funcionStr, setFuncionStr] = useState('x^3 - 4*x - 9');
   const [a, setA] = useState(2);
@@ -13,7 +10,7 @@ const SimuladorTab = () => {
   const [tol, setTol] = useState(0.0001);
   const [maxIter, setMaxIter] = useState(20);
 
-  // Estados del Reproductor Paso a Paso
+  // Estados para el control Paso a Paso
   const [historialIteraciones, setHistorialIteraciones] = useState([]);
   const [pasoActual, setPasoActual] = useState(0);
   const [reproduciendo, setReproduciendo] = useState(false);
@@ -22,17 +19,17 @@ const SimuladorTab = () => {
 
   const f = (xVal) => evaluate(funcionStr, { x: xVal });
 
-  // Algoritmo Numérico (Unificado para Bisección y Regla Falsa)
+  // Precalcula todas las iteraciones
   const calcularMetodo = () => {
     setErrorMensaje('');
     detenerAnimacion();
-
+    
     try {
       let fa = f(a);
       let fb = f(b);
 
       if (fa * fb >= 0) {
-        setErrorMensaje('Teorema de Bolzano no cumplido: f(a) y f(b) deben tener signos opuestos.');
+        setErrorMensaje('Teorema de Bolzano no cumplido: f(a) y f(b) deben tener el mismo signo opuesto.');
         setHistorialIteraciones([]);
         setPasoActual(0);
         return;
@@ -46,17 +43,7 @@ const SimuladorTab = () => {
       let cPrev = null;
 
       while (iter <= maxIter && error > tol) {
-        let faCurr = f(aCurr);
-        let fbCurr = f(bCurr);
-        let c = 0;
-
-        // Fórmula del Punto Medio / Intersección
-        if (metodoSeleccionado === 'biseccion') {
-          c = (aCurr + bCurr) / 2.0;
-        } else if (metodoSeleccionado === 'regla_falsa') {
-          c = (aCurr * fbCurr - bCurr * faCurr) / (fbCurr - faCurr);
-        }
-
+        let c = (aCurr + bCurr) / 2;
         let fc = f(c);
 
         if (cPrev !== null) {
@@ -70,15 +57,15 @@ const SimuladorTab = () => {
           a: aCurr,
           b: bCurr,
           c: c,
-          fa: faCurr,
-          fb: fbCurr,
+          fa: f(aCurr),
+          fb: f(bCurr),
           fc: fc,
           error: error
         });
 
         if (Math.abs(fc) < 1e-12) break;
 
-        if (faCurr * fc < 0) {
+        if (f(aCurr) * fc < 0) {
           bCurr = c;
         } else {
           aCurr = c;
@@ -89,7 +76,7 @@ const SimuladorTab = () => {
       }
 
       setHistorialIteraciones(pasos);
-      setPasoActual(1);
+      setPasoActual(1); // Iniciar en la primera iteración
 
     } catch (err) {
       setErrorMensaje('Sintaxis de función no válida.');
@@ -97,10 +84,8 @@ const SimuladorTab = () => {
   };
 
   useEffect(() => {
-    if (metodoSeleccionado) {
-      calcularMetodo();
-    }
-  }, [metodoSeleccionado]);
+    calcularMetodo();
+  }, []);
 
   // Animación Automática (Play/Pause)
   useEffect(() => {
@@ -114,7 +99,7 @@ const SimuladorTab = () => {
             return prev;
           }
         });
-      }, 1200);
+      }, 1200); // Avanza cada 1.2 segundos
     } else {
       clearInterval(timerRef.current);
     }
@@ -126,7 +111,7 @@ const SimuladorTab = () => {
     if (timerRef.current) clearInterval(timerRef.current);
   };
 
-  // Generación de Datos para Plotly
+  // Datos para la gráfica actual según el paso seleccionado
   const generarDatosGrafica = () => {
     const minX = Math.min(a, b) - 1;
     const maxX = Math.max(a, b) + 1;
@@ -158,23 +143,11 @@ const SimuladorTab = () => {
       }
     ];
 
+    // Marcar el intervalo actual [a, b] y el punto c del paso visible
     if (historialIteraciones.length > 0 && pasoActual > 0) {
       const estadoPaso = historialIteraciones[pasoActual - 1];
 
-      // En Regla Falsa trazamos la secante entre (a, f(a)) y (b, f(b))
-      if (metodoSeleccionado === 'regla_falsa') {
-        data.push({
-          x: [estadoPaso.a, estadoPaso.b],
-          y: [estadoPaso.fa, estadoPaso.fb],
-          type: 'scatter',
-          mode: 'lines+markers',
-          name: `Línea Secante`,
-          line: { color: '#fd7e14', width: 2, dash: 'dot' },
-          marker: { size: 6 }
-        });
-      }
-
-      // Intervalo [a, b]
+      // Intervalo [a, b] actual
       data.push({
         x: [estadoPaso.a, estadoPaso.b],
         y: [0, 0],
@@ -185,7 +158,7 @@ const SimuladorTab = () => {
         marker: { size: 8 }
       });
 
-      // Punto c
+      // Punto medio c calculando en este paso
       data.push({
         x: [estadoPaso.c],
         y: [0],
@@ -202,86 +175,16 @@ const SimuladorTab = () => {
   const pasoVisible = historialIteraciones.slice(0, pasoActual);
   const estadoActual = historialIteraciones[pasoActual - 1];
 
-  // ---------------------------------------------------------------------------
-  // VISTA 1: MENÚ DE SELECCIÓN (CARDS DE BOOTSTRAP)
-  // ---------------------------------------------------------------------------
-  if (!metodoSeleccionado) {
-    return (
-      <div className="p-4 border rounded bg-light">
-        <div className="text-center mb-4">
-          <h4 className="text-primary fw-bold mb-2">
-            <i className="bi bi-cpu me-2"></i>Simulador de Métodos del Subtema 2.1
-          </h4>
-          <p className="text-muted">
-            Selecciona el método numérico cerrado que deseas simular paso a paso:
-          </p>
-        </div>
-
-        <div className="row g-4 justify-content-center">
-          {/* Card 1: Método de Bisección */}
-          <div className="col-md-5">
-            <div className="card h-100 shadow-sm border-0 border-top border-4 border-primary hover-shadow">
-              <div className="card-body p-4 d-flex flex-column text-center">
-                <div className="display-5 text-primary mb-3">
-                  <i className="bi bi-diagram-2"></i>
-                </div>
-                <h5 className="fw-bold text-dark mb-2">Método de Bisección</h5>
-                <p className="text-muted small flex-grow-1">
-                  Divide el intervalo a la mitad en cada iteración ($c = \frac{a+b}{2}$). Garantiza convergencia lenta pero segura.
-                </p>
-                <button
-                  className="btn btn-primary fw-semibold w-100 mt-3"
-                  onClick={() => setMetodoSeleccionado('biseccion')}
-                >
-                  <i className="bi bi-play-circle me-2"></i>Iniciar Bisección
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Método de Regla Falsa */}
-          <div className="col-md-5">
-            <div className="card h-100 shadow-sm border-0 border-top border-4 border-warning hover-shadow">
-              <div className="card-body p-4 d-flex flex-column text-center">
-                <div className="display-5 text-warning mb-3">
-                  <i className="bi bi-graph-up-arrow"></i>
-                </div>
-                <h5 className="fw-bold text-dark mb-2">Método de Regla Falsa</h5>
-                <p className="text-muted small flex-grow-1">
-                  Aprovecha la magnitud de $f(a)$ y $f(b)$ uniendo los puntos con una recta secante para aproximar la raíz más rápido.
-                </p>
-                <button
-                  className="btn btn-warning fw-semibold text-dark w-100 mt-3"
-                  onClick={() => setMetodoSeleccionado('regla_falsa')}
-                >
-                  <i className="bi bi-play-circle me-2"></i>Iniciar Regla Falsa
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // VISTA 2: SIMULADOR INTERACTIVO PASO A PASO
-  // ---------------------------------------------------------------------------
   return (
     <div className="p-3 border rounded bg-light">
-      {/* Encabezado con Botón de Regresar */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div>
-          <button
-            className="btn btn-outline-secondary btn-sm me-3"
-            onClick={() => { detenerAnimacion(); setMetodoSeleccionado(null); }}
-          >
-            <i className="bi bi-arrow-left me-1"></i> Cambiar Método
-          </button>
-          <span className="h5 text-primary fw-bold align-middle mb-0">
-            <i className="bi bi-calculator me-2"></i>
-            Simulador: {metodoSeleccionado === 'biseccion' ? 'Método de Bisección' : 'Método de Regla Falsa'}
-          </span>
+          <h5 className="text-primary fw-bold mb-1">
+            <i className="bi bi-play-circle me-2"></i>Simulador Paso a Paso - Bisección
+          </h5>
+          <p className="text-muted small mb-0">
+            Avanza iteración por iteración para analizar el comportamiento numérico y gráfico del intervalo.
+          </p>
         </div>
       </div>
 
@@ -325,14 +228,14 @@ const SimuladorTab = () => {
         </div>
         <div className="col-md-2 d-flex align-items-end">
           <button className="btn btn-primary btn-sm w-100 fw-bold" onClick={calcularMetodo}>
-            <i className="bi bi-arrow-clockwise me-1"></i> Recalcular
+            <i className="bi bi-arrow-clockwise me-1"></i> Reiniciar
           </button>
         </div>
       </div>
 
       {errorMensaje && <div className="alert alert-danger py-2 small">{errorMensaje}</div>}
 
-      {/* Botones de Control del Reproductor Paso a Paso */}
+      {/* Controles del Reproductor Paso a Paso */}
       {historialIteraciones.length > 0 && (
         <div className="card mb-3 border-primary shadow-sm">
           <div className="card-body p-2 d-flex align-items-center justify-content-between bg-white rounded">
@@ -390,7 +293,7 @@ const SimuladorTab = () => {
         <div className="col-lg-6">
           <div className="card shadow-sm border h-100">
             <div className="card-header bg-dark text-white py-1 px-3 small fw-bold">
-              <i className="bi bi-graph-up me-2 text-warning"></i>Gráfica
+              <i className="bi bi-graph-up me-2 text-warning"></i>Visualización del Intervalo
             </div>
             <div className="card-body p-1" style={{ minHeight: '320px' }}>
               <Plot
@@ -412,7 +315,7 @@ const SimuladorTab = () => {
         <div className="col-lg-6">
           <div className="card shadow-sm border h-100">
             <div className="card-header bg-dark text-white py-1 px-3 small fw-bold d-flex justify-content-between">
-              <span><i className="bi bi-table me-2 text-info"></i>Tabla de Iteraciones</span>
+              <span><i className="bi bi-table me-2 text-info"></i>Tabla Progresiva</span>
               {estadoActual && (
                 <span className="badge bg-success">
                   c_{pasoActual} = {estadoActual.c.toFixed(6)}
@@ -426,7 +329,7 @@ const SimuladorTab = () => {
                     <th className="ps-2">i</th>
                     <th>a</th>
                     <th>b</th>
-                    <th>c</th>
+                    <th>c (Punto medio)</th>
                     <th>f(c)</th>
                     <th>Error %</th>
                   </tr>
