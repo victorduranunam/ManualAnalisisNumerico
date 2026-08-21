@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SesionActual from './pages/participaciones/SesionActual';
 import HistoricoParticipaciones from './pages/participaciones/HistoricoParticipaciones';
 import AdminParticipaciones from './pages/participaciones/AdminParticipaciones';
@@ -8,19 +8,47 @@ export default function ParticipacionesApp() {
   const [autenticado, setAutenticado] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [errorPassword, setErrorPassword] = useState(false);
+  const [cargando, setCargando] = useState(false);
 
-  // Clave de acceso para ingresar al panel docente
-  const CLAVE_ADMIN = 'UNAM2026';
-
-  const handleAccesoAdmin = (e) => {
-    e.preventDefault();
-    if (passwordInput === CLAVE_ADMIN) {
+  // Mantener la sesión de administración iniciada durante la navegación activa
+  useEffect(() => {
+    const token = sessionStorage.getItem('admin_token');
+    if (token) {
       setAutenticado(true);
-      setErrorPassword(false);
-      setPasswordInput('');
-    } else {
-      setErrorPassword(true);
     }
+  }, []);
+
+  const handleAccesoAdmin = async (e) => {
+    e.preventDefault();
+    setErrorPassword(false);
+    setCargando(true);
+
+    try {
+      const response = await fetch('/victord/ManualAnalisisNumerico/public/api/login_admin.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'success') {
+        setAutenticado(true);
+        sessionStorage.setItem('admin_token', data.token);
+        setPasswordInput('');
+      } else {
+        setErrorPassword(true);
+      }
+    } catch (err) {
+      setErrorPassword(true);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const handleSalirAdmin = () => {
+    setAutenticado(false);
+    sessionStorage.removeItem('admin_token');
   };
 
   return (
@@ -108,8 +136,21 @@ export default function ParticipacionesApp() {
                       </div>
                     )}
                   </div>
-                  <button type="submit" className="btn btn-danger w-100 fw-semibold">
-                    <i className="bi bi-box-arrow-in-right me-2"></i> Acceder
+                  <button 
+                    type="submit" 
+                    className="btn btn-danger w-100 fw-semibold"
+                    disabled={cargando}
+                  >
+                    {cargando ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Verificando...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-box-arrow-in-right me-2"></i> Acceder
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
@@ -118,7 +159,7 @@ export default function ParticipacionesApp() {
                 <div className="d-flex justify-content-end mb-3">
                   <button
                     className="btn btn-outline-secondary btn-sm"
-                    onClick={() => setAutenticado(false)}
+                    onClick={handleSalirAdmin}
                   >
                     <i className="bi bi-box-arrow-left me-1"></i> Salir del modo Administrador
                   </button>

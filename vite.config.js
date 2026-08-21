@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: './', // <--- Agrega esta línea para que use rutas relativas
-})
+  // En producción usa la ruta absoluta de cozumel, en desarrollo usa la raíz '/'
+  base: mode === 'production' ? '/victord/ManualAnalisisNumerico/' : '/',
+}))
