@@ -20,8 +20,11 @@ print("Solución del sistema:", x)`;
         Modifica y ejecuta el siguiente código Python para resolver el ejercicio interactivo:
       </p>
 
-      {/* Componente del Editor */}
-      <PythonEditor codigoInicial={codigoInicial} />
+      {/* Solo agregas lineasVisibles si deseas ajustar los renglones iniciales */}
+      <PythonEditor 
+        codigoInicial={codigoInicial} 
+        lineasVisibles={10} 
+      />
     </div>
   );
 };

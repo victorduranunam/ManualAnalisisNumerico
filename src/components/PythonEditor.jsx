@@ -3,7 +3,9 @@ import Editor from '@monaco-editor/react';
 
 export default function PythonEditor({ 
   codigoInicial = '# Escribe tu código Python aquí\nimport numpy as np\nprint("¡Hola desde la UNAM!")',
-  altura = '220px' // Permite ajustar el alto desde el componente padre
+  lineasVisibles = 8, // La vista controla el alto en renglones
+  onCodeChange,       // Opcional: callback para enviar código al padre
+  onOutputChange      // Opcional: callback para enviar la salida al padre
 }) {
   const [code, setCode] = useState(codigoInicial);
   const [output, setOutput] = useState('');
@@ -12,7 +14,9 @@ export default function PythonEditor({
   const [loading, setLoading] = useState(true);
   const [statusText, setStatusText] = useState('Iniciando motor Python...');
 
-  // Inicializar Pyodide cargado previamente desde index.html
+  const editorHeight = `${lineasVisibles * 19 + 12}px`;
+
+  // Inicializar Pyodide
   useEffect(() => {
     async function initPyodide() {
       if (window.loadPyodide && !pyodide) {
@@ -22,7 +26,9 @@ export default function PythonEditor({
           setLoading(false);
           setStatusText('');
         } catch (err) {
-          setOutput('Error al inicializar Pyodide: ' + err.message);
+          const errText = 'Error al inicializar Pyodide: ' + err.message;
+          setOutput(errText);
+          onOutputChange?.(errText); // Se notifica al padre solo si se pasó el callback
           setLoading(false);
         }
       }
@@ -30,10 +36,17 @@ export default function PythonEditor({
     initPyodide();
   }, [pyodide]);
 
-  // Sincronizar el estado del código si la prop codigoInicial cambia desde React
+  // Sincronizar código inicial
   useEffect(() => {
     setCode(codigoInicial);
+    onCodeChange?.(codigoInicial);
   }, [codigoInicial]);
+
+  const handleEditorChange = (val) => {
+    const nuevoCodigo = val || '';
+    setCode(nuevoCodigo);
+    onCodeChange?.(nuevoCodigo); // Notifica al padre opcionalmente
+  };
 
   const runCode = async () => {
     if (!pyodide) return;
@@ -43,7 +56,6 @@ export default function PythonEditor({
     setOutput('Cargando librerías y ejecutando...');
 
     try {
-      // 1. Cargar librerías necesarias dinámicamente según lo importado en el código
       const packagesToLoad = [];
       if (code.includes('numpy') || code.includes('np.')) packagesToLoad.push('numpy');
       if (code.includes('sympy') || code.includes('sp.')) packagesToLoad.push('sympy');
@@ -56,7 +68,6 @@ export default function PythonEditor({
 
       setStatusText('Ejecutando script...');
 
-      // 2. Redirigir consola (stdout) y preparar el backend gráfico de Matplotlib
       await pyodide.runPythonAsync(`
         import sys
         import io
@@ -70,10 +81,8 @@ export default function PythonEditor({
             plt.close('all')
       `);
 
-      // 3. Ejecutar el código Python escrito por el usuario
       await pyodide.runPythonAsync(code);
 
-      // 4. Capturar gráficas generadas con Matplotlib (si aplica)
       const hasPlot = await pyodide.runPythonAsync(`
         import base64
         img_str = ""
@@ -93,12 +102,16 @@ export default function PythonEditor({
         setPlotImage(`data:image/png;base64,${hasPlot}`);
       }
 
-      // 5. Capturar impresiones de consola (print)
       const stdout = pyodide.runPython('sys.stdout.getvalue()');
-      setOutput(stdout || (hasPlot ? 'Gráfica generada con éxito.' : 'Ejecutado correctamente (sin salida de texto).'));
+      const resultadoFinal = stdout || (hasPlot ? 'Gráfica generada con éxito.' : 'Ejecutado correctamente (sin salida de texto).');
+      
+      setOutput(resultadoFinal);
+      onOutputChange?.(resultadoFinal); // Notifica al padre opcionalmente
 
     } catch (err) {
-      setOutput('Error de ejecución:\n' + String(err));
+      const errorText = 'Error de ejecución:\n' + String(err);
+      setOutput(errorText);
+      onOutputChange?.(errorText);
     } finally {
       setLoading(false);
       setStatusText('');
@@ -107,7 +120,6 @@ export default function PythonEditor({
 
   return (
     <div className="card shadow-sm my-3 border-0">
-      {/* Encabezado del Editor */}
       <div className="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
         <span className="fw-bold small">
           <i className="bi bi-code-slash me-2 text-warning"></i>Editor Interactivo de Python
@@ -121,24 +133,27 @@ export default function PythonEditor({
         </button>
       </div>
 
-      {/* Monaco Editor con altura dinámicamente personalizable */}
       <div className="card-body p-0">
         <Editor
-          height={altura}
+          height={editorHeight}
           defaultLanguage="python"
           theme="vs-dark"
           value={code}
-          onChange={(val) => setCode(val || '')}
+          onChange={handleEditorChange}
           options={{
             minimap: { enabled: false },
             automaticLayout: true,
             fontSize: 13,
+            lineHeight: 19,
             scrollBeyondLastLine: false,
+            scrollbar: {
+              vertical: 'visible',
+              horizontal: 'auto'
+            }
           }}
         />
       </div>
 
-      {/* Render de Gráficas de Matplotlib */}
       {plotImage && (
         <div className="card-body bg-white text-center border-top p-2">
           <small className="text-secondary d-block mb-1 fw-bold">Gráfica Generada:</small>
@@ -146,15 +161,14 @@ export default function PythonEditor({
             src={plotImage} 
             alt="Gráfica de Matplotlib" 
             className="img-fluid rounded border shadow-sm" 
-            style={{ maxHeight: '280px' }} 
+            style={{ maxHeight: '250px' }} 
           />
         </div>
       )}
 
-      {/* Consola de Salida de Texto */}
       <div className="card-footer bg-black text-warning font-monospace p-2">
         <small className="d-block text-secondary mb-1" style={{ fontSize: '11px' }}>Consola / Salida:</small>
-        <pre className="m-0 small" style={{ whiteSpace: 'pre-wrap', maxHeight: '150px', overflowY: 'auto' }}>
+        <pre className="m-0 small" style={{ whiteSpace: 'pre-wrap', maxHeight: '120px', overflowY: 'auto' }}>
           {output || '// Presiona "Ejecutar" para procesar el código'}
         </pre>
       </div>

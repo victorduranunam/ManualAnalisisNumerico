@@ -1,16 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
-// 1. Importar CSS de Bootstrap e Iconos
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+// 1. IMPORTANTE: Cargar los estilos CSS personalizados aquí
+import './index.css'; 
 
-// 2. Tus estilos personalizados y el App
-import './index.css'
-import App from './App.jsx'
+import App from './App.jsx';
+import ParticipacionesApp from './ParticipacionesApp.jsx';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/participaciones/*" element={<ParticipacionesApp />} />
+      </Routes>
+    </Router>
+  </React.StrictMode>
+);
