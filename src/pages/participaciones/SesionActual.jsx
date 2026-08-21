@@ -11,10 +11,7 @@ export default function SesionActual() {
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
 
-  // Ruta apuntando a la subcarpeta pública del servidor PHP
-  //const API_URL = './public/api/registrar_participacion.php';
-//  const API_URL = './api/registrar_participacion.php';
-// Ruta absoluta apuntando a la subcarpeta public/api/
+  // Ruta absoluta apuntando a la subcarpeta public/api/
   const API_URL = '/victord/ManualAnalisisNumerico/public/api/registrar_participacion.php';
 
   const codigoPruebasInicial = `# Zona de Borrador / Pruebas Libres
@@ -32,15 +29,37 @@ print("Entrega de participación")`;
   const handleEnviarParticipacion = async (e) => {
     e.preventDefault();
 
-    if (!numeroCuenta.trim()) {
-      setMensaje({ tipo: 'danger', texto: 'Por favor, ingresa tu número de cuenta UNAM.' });
+    const terminalLimpia = terminalOficial.trim().toLowerCase();
+
+    // 1. Validar que la terminal de la Entrega Oficial SE HAYA EJECUTADO
+    // Bloquea si está vacía o si contiene el texto predeterminado sin ejecutar
+    if (
+      !terminalLimpia || 
+      terminalLimpia.includes('presiona') || 
+      terminalLimpia.startsWith('//') || 
+      terminalLimpia.startsWith('#')
+    ) {
+      setMensaje({ 
+        tipo: 'warning', 
+        texto: 'Es obligatorio presionar el botón "▶ Ejecutar" en la ventana de Entrega Oficial antes de enviar.' 
+      });
       return;
     }
 
-    if (!terminalOficial.trim() || terminalOficial.startsWith('// Presiona')) {
+    // 2. Validar que el Código de Python no esté vacío
+    if (!codigoOficial.trim()) {
       setMensaje({ 
-        tipo: 'warning', 
-        texto: 'Debes presionar "Ejecutar" en la ventana de Entrega Oficial para verificar la salida de la terminal antes de enviar.' 
+        tipo: 'danger', 
+        texto: 'El código de la Entrega Oficial no puede estar vacío.' 
+      });
+      return;
+    }
+
+    // 3. Validar Número de Cuenta UNAM
+    if (!numeroCuenta.trim()) {
+      setMensaje({ 
+        tipo: 'danger', 
+        texto: 'Por favor, ingresa tu número de cuenta UNAM.' 
       });
       return;
     }
@@ -62,10 +81,9 @@ print("Entrega de participación")`;
         }),
       });
 
-      // Verificación de la respuesta enviada por PHP
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
-        throw new Error(`El servidor devolvió un error (${response.status}). Revisa los permisos de la carpeta public/api/db/ en el servidor.`);
+        throw new Error(`El servidor devolvió un error (${response.status}). Revisa los permisos en el servidor.`);
       }
 
       const data = await response.json();
@@ -76,7 +94,7 @@ print("Entrega de participación")`;
 
       setMensaje({ 
         tipo: 'success', 
-        texto: data.mensaje || '¡Participación registrada exitosamente en SQLite!' 
+        texto: data.mensaje || '¡Participación registrada exitosamente!' 
       });
 
     } catch (error) {
@@ -100,32 +118,13 @@ print("Entrega de participación")`;
             <div>
               <h5 className="alert-heading fw-bold mb-1">Registro de Participación de la Clase</h5>
               <p className="mb-0">
-                Escribe tu código en la sección oficial, presiona <strong>Ejecutar</strong> para verificar el resultado en consola e ingresa tu número de cuenta para guardarlo en la base de datos.
+                Escribe tu código en la sección oficial, presiona <strong>▶ Ejecutar</strong> para generar la salida en consola e ingresa tu número de cuenta al final para registrar tu entrega.
               </p>
             </div>
           </div>
 
           <form onSubmit={handleEnviarParticipacion}>
             
-            {/* Campo de Número de Cuenta */}
-            <div className="row mb-4">
-              <div className="col-md-5">
-                <label htmlFor="numeroCuenta" className="form-label fw-bold">
-                  Número de Cuenta UNAM <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="numeroCuenta"
-                  className="form-control"
-                  placeholder="Ej. 318000000"
-                  value={numeroCuenta}
-                  onChange={(e) => setNumeroCuenta(e.target.value)}
-                  maxLength={10}
-                  required
-                />
-              </div>
-            </div>
-
             {/* 1. Área de Borrador */}
             <div className="mb-5 p-3 bg-light rounded border">
               <h6 className="fw-bold text-secondary mb-1">
@@ -148,7 +147,7 @@ print("Entrega de participación")`;
                 Entrega Oficial de Participación <span className="text-danger">*</span>
               </h5>
               <small className="text-muted d-block mb-2">
-                <strong>Indispensable:</strong> Presiona "▶ Ejecutar" en este editor antes de enviar para capturar la salida.
+                <strong>Indispensable:</strong> Presiona "▶ Ejecutar" en este editor antes de enviar para capturar la salida de la terminal.
               </small>
               <PythonEditor
                 codigoInicial={codigoOficialInicial}
@@ -156,6 +155,31 @@ print("Entrega de participación")`;
                 onCodeChange={(val) => setCodigoOficial(val)}
                 onOutputChange={(val) => setTerminalOficial(val)}
               />
+            </div>
+
+            {/* Campo de Número de Cuenta (Al final de las ventanas) */}
+            <div className="card bg-light border-0 p-3 mb-4">
+              <div className="row align-items-center">
+                <div className="col-md-6">
+                  <label htmlFor="numeroCuenta" className="form-label fw-bold mb-1">
+                    <i className="bi bi-person-badge me-2 text-primary"></i>
+                    Número de Cuenta UNAM <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="numeroCuenta"
+                    className="form-control"
+                    placeholder="Ej. 318000000"
+                    value={numeroCuenta}
+                    onChange={(e) => setNumeroCuenta(e.target.value)}
+                    maxLength={10}
+                    required
+                  />
+                  <small className="text-muted">
+                    Ingresa tu número de cuenta para vincular esta entrega.
+                  </small>
+                </div>
+              </div>
             </div>
 
             {/* Retroalimentación al usuario */}
