@@ -11,9 +11,8 @@ export default function SesionActual() {
   const [enviando, setEnviando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
 
-  // Ruta apuntando a la subcarpeta pública del servidor PHP
-  //const API_URL = './public/api/registrar_participacion.php';
-  const API_URL = './api/registrar_participacion.php';
+  // Ruta hacia el script PHP dentro de public/api/
+  const API_URL = './public/api/registrar_participacion.php';
 
   const codigoPruebasInicial = `# Zona de Borrador / Pruebas Libres
 import numpy as np
@@ -60,12 +59,6 @@ print("Entrega de participación")`;
         }),
       });
 
-      // Verificación de la respuesta enviada por PHP
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error(`El servidor devolvió un error (${response.status}). Revisa los permisos de la carpeta public/api/db/ en el servidor.`);
-      }
-
       const data = await response.json();
 
       if (!response.ok) {
@@ -74,13 +67,12 @@ print("Entrega de participación")`;
 
       setMensaje({ 
         tipo: 'success', 
-        texto: data.mensaje || '¡Participación registrada exitosamente en SQLite!' 
+        texto: data.mensaje || '¡Participación registrada exitosamente!' 
       });
-
     } catch (error) {
       setMensaje({ 
         tipo: 'danger', 
-        texto: error.message || 'Ocurrió un error al conectar con la base de datos.' 
+        texto: error.message || 'Ocurrió un error al enviar la participación. Intenta de nuevo.' 
       });
     } finally {
       setEnviando(false);
@@ -92,13 +84,14 @@ print("Entrega de participación")`;
       <div className="card shadow-sm border-0 mb-4">
         <div className="card-body p-4">
           
-          {/* Instrucciones */}
+          {/* Instrucciones de la Clase */}
           <div className="alert alert-primary border-0 d-flex align-items-center mb-4" role="alert">
             <i className="bi bi-info-circle-fill fs-4 me-3"></i>
             <div>
               <h5 className="alert-heading fw-bold mb-1">Registro de Participación de la Clase</h5>
               <p className="mb-0">
-                Escribe tu código en la sección oficial, presiona <strong>Ejecutar</strong> para verificar el resultado en consola e ingresa tu número de cuenta para guardarlo en la base de datos.
+                Aquí subirás el código de la participación que se está realizando en la clase.
+                Puedes usar el área de borrador para experimentar y, cuando estés listo, ejecuta tu código en el área oficial e ingresa tu número de cuenta para enviar.
               </p>
             </div>
           </div>
@@ -124,14 +117,14 @@ print("Entrega de participación")`;
               </div>
             </div>
 
-            {/* 1. Área de Borrador */}
+            {/* 1. Editor de Borrador (Sin captura de datos) */}
             <div className="mb-5 p-3 bg-light rounded border">
               <h6 className="fw-bold text-secondary mb-1">
                 <i className="bi bi-pencil-square me-2"></i>
                 Área de Pruebas Libres / Borrador
               </h6>
               <small className="text-muted d-block mb-2">
-                Espacio de pruebas. Las ejecuciones en este bloque no se guardan en el servidor.
+                Utiliza este entorno para hacer cálculos previos. Lo que ejecutes aquí no se enviará en el registro final.
               </small>
               <PythonEditor
                 codigoInicial={codigoPruebasInicial}
@@ -139,14 +132,14 @@ print("Entrega de participación")`;
               />
             </div>
 
-            {/* 2. Entrega Oficial */}
+            {/* 2. Editor Oficial (Captura código y salida para enviar al PHP) */}
             <div className="mb-4 p-3 bg-white rounded border border-2 border-primary shadow-sm">
               <h5 className="fw-bold text-primary mb-1">
                 <i className="bi bi-check-circle-fill me-2"></i>
                 Entrega Oficial de Participación <span className="text-danger">*</span>
               </h5>
               <small className="text-muted d-block mb-2">
-                <strong>Indispensable:</strong> Presiona "▶ Ejecutar" en este editor antes de enviar para capturar la salida.
+                Escribe aquí el código definitivo. **Es indispensable presionar "▶ Ejecutar"** en este editor para capturar el resultado de la consola.
               </small>
               <PythonEditor
                 codigoInicial={codigoOficialInicial}
@@ -156,7 +149,7 @@ print("Entrega de participación")`;
               />
             </div>
 
-            {/* Retroalimentación al usuario */}
+            {/* Alertas y Mensajes */}
             {mensaje && (
               <div className={`alert alert-${mensaje.tipo} alert-dismissible fade show my-3`} role="alert">
                 {mensaje.texto}
@@ -164,7 +157,7 @@ print("Entrega de participación")`;
               </div>
             )}
 
-            {/* Botón de Guardado */}
+            {/* Botón de Envío */}
             <div className="d-flex justify-content-end mt-4">
               <button
                 type="submit"
@@ -174,7 +167,7 @@ print("Entrega de participación")`;
                 {enviando ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Almacenando en SQLite...
+                    Guardando en servidor...
                   </>
                 ) : (
                   <>
