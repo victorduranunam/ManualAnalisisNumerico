@@ -1,281 +1,291 @@
-﻿import React, { useState, useEffect } from 'react';
-import Plot from 'react-plotly.js';
-import { evaluate } from 'mathjs';
+﻿import React from "react";
 
-const SimuladorTab = () => {
-  // Parámetros de entrada
-  const [funcionStr, setFuncionStr] = useState('x^3 - 4*x - 9');
-  const [a, setA] = useState(2);
-  const [b, setB] = useState(3);
-  const [tol, setTol] = useState(0.0001);
-  const [maxIter, setMaxIter] = useState(20);
-
-  // Resultados
-  const [filasTabla, setFilasTabla] = useState([]);
-  const [raizEncontrada, setRaizEncontrada] = useState(null);
-  const [errorMensaje, setErrorMensaje] = useState('');
-
-  // Evaluación matemática de f(x)
-  const f = (xVal) => {
-    return evaluate(funcionStr, { x: xVal });
-  };
-
-  const calcularBiseccion = () => {
-    setErrorMensaje('');
-    setFilasTabla([]);
-    setRaizEncontrada(null);
-
-    try {
-      let fa = f(a);
-      let fb = f(b);
-
-      if (fa * fb >= 0) {
-        setErrorMensaje('Teorema de Bolzano no cumplido: f(a) y f(b) deben tener signos opuestos.');
-        return;
-      }
-
-      let aCurr = parseFloat(a);
-      let bCurr = parseFloat(b);
-      let iter = 1;
-      let error = Math.abs(bCurr - aCurr);
-      const tabla = [];
-      let cPrev = null;
-
-      while (iter <= maxIter && error > tol) {
-        let c = (aCurr + bCurr) / 2;
-        let fc = f(c);
-
-        if (cPrev !== null) {
-          error = Math.abs((c - cPrev) / c) * 100;
-        } else {
-          error = Math.abs(bCurr - aCurr);
-        }
-
-        tabla.push({
-          iter,
-          a: aCurr.toFixed(6),
-          b: bCurr.toFixed(6),
-          c: c.toFixed(6),
-          fa: f(aCurr).toFixed(6),
-          fb: f(bCurr).toFixed(6),
-          fc: fc.toFixed(6),
-          error: error.toFixed(6)
-        });
-
-        if (Math.abs(fc) < 1e-12) break;
-
-        if (f(aCurr) * fc < 0) {
-          bCurr = c;
-        } else {
-          aCurr = c;
-        }
-
-        cPrev = c;
-        iter++;
-      }
-
-      setFilasTabla(tabla);
-      setRaizEncontrada(tabla[tabla.length - 1].c);
-
-    } catch (err) {
-      setErrorMensaje('Sintaxis de la función no válida. Usa sintaxis estándar (ej: x^3 - 4*x - 9).');
-    }
-  };
-
-  useEffect(() => {
-    calcularBiseccion();
-  }, []);
-
-  const generarDatosGrafica = () => {
-    const xVals = [];
-    const yVals = [];
-    const minX = Math.min(a, b) - 2;
-    const maxX = Math.max(a, b) + 2;
-    const paso = (maxX - minX) / 100;
-
-    for (let x = minX; x <= maxX; x += paso) {
-      xVals.push(x);
-      try {
-        yVals.push(f(x));
-      } catch {
-        yVals.push(null);
-      }
-    }
-
-    const data = [
-      {
-        x: xVals,
-        y: yVals,
-        type: 'scatter',
-        mode: 'lines',
-        name: `f(x) = ${funcionStr}`,
-        line: { color: '#0d6efd', width: 2.5 }
-      },
-      {
-        x: [minX, maxX],
-        y: [0, 0],
-        type: 'scatter',
-        mode: 'lines',
-        name: 'Eje X',
-        line: { color: '#6c757d', dash: 'dash' }
-      }
-    ];
-
-    if (raizEncontrada !== null) {
-      data.push({
-        x: [parseFloat(raizEncontrada)],
-        y: [0],
-        type: 'scatter',
-        mode: 'markers',
-        name: `Raíz ≈ ${raizEncontrada}`,
-        marker: { color: '#dc3545', size: 10, symbol: 'diamond' }
-      });
-    }
-
-    return data;
-  };
-
+const FundamentosTab = () => {
   return (
     <div className="p-3 border rounded bg-light">
       {/* Encabezado Principal */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <h5 className="text-primary fw-bold mb-1">
-            <i className="bi bi-calculator me-2"></i>Simulador del Método de Bisección
-          </h5>
-          <p className="text-muted small mb-0">
-            Ingresa la función $f(x)$ y los intervalos para calcular numéricamente la raíz con su gráfica y tabla de iteraciones.
+      <div className="mb-4 pb-2 border-bottom">
+        <span className="badge bg-primary mb-2">Unidad 1: Teoría de Errores</span>
+        <h3 className="text-primary fw-bold mb-1">
+          Subtema 1.2: Representación de números en punto flotante y sus limitaciones
+        </h3>
+        <p className="text-secondary mb-0">
+          Fundamentos del estándar IEEE 754, épsilon de la máquina y fenómenos numéricos críticos en computación científica.
+        </p>
+      </div>
+
+      {/* 1. Motivación */}
+      <section className="card mb-4 shadow-sm">
+        <div className="card-header bg-white fw-bold text-dark">
+          1. Motivación: De los Reales (&reals;) a los Flotantes (&Fopf;)
+        </div>
+        <div className="card-body">
+          <p className="card-text">
+            <strong>La limitación de la memoria:</strong> El conjunto de los números reales (&reals;) es continuo e infinito, 
+            mientras que la memoria de un computador es discreta y finita (estructurada en palabras de 32 o 64 bits).
           </p>
-        </div>
-      </div>
-
-      {/* Formulario de Parámetros */}
-      <div className="row g-2 mb-3 p-3 bg-white rounded border shadow-sm">
-        <div className="col-md-4">
-          <label className="form-label small fw-bold mb-1">Función $f(x)$</label>
-          <input
-            type="text"
-            className="form-control form-control-sm font-monospace"
-            value={funcionStr}
-            onChange={(e) => setFuncionStr(e.target.value)}
-            placeholder="x^3 - 4*x - 9"
-          />
-        </div>
-
-        <div className="col-md-2">
-          <label className="form-label small fw-bold mb-1">Límite $a$</label>
-          <input
-            type="number"
-            step="any"
-            className="form-control form-control-sm"
-            value={a}
-            onChange={(e) => setA(parseFloat(e.target.value))}
-          />
-        </div>
-
-        <div className="col-md-2">
-          <label className="form-label small fw-bold mb-1">Límite $b$</label>
-          <input
-            type="number"
-            step="any"
-            className="form-control form-control-sm"
-            value={b}
-            onChange={(e) => setB(parseFloat(e.target.value))}
-          />
-        </div>
-
-        <div className="col-md-2">
-          <label className="form-label small fw-bold mb-1">Tolerancia</label>
-          <input
-            type="number"
-            step="any"
-            className="form-control form-control-sm"
-            value={tol}
-            onChange={(e) => setTol(parseFloat(e.target.value))}
-          />
-        </div>
-
-        <div className="col-md-2 d-flex align-items-end">
-          <button className="btn btn-success btn-sm w-100 fw-bold" onClick={calcularBiseccion}>
-            <i className="bi bi-play-fill me-1"></i> Calcular
-          </button>
-        </div>
-      </div>
-
-      {/* Mensaje de Error en sintaxis o intervalo */}
-      {errorMensaje && (
-        <div className="alert alert-danger py-2 small" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2"></i>{errorMensaje}
-        </div>
-      )}
-
-      {/* Panel Inferior: Gráfica + Tabla de Iteraciones */}
-      <div className="row g-3">
-        {/* Gráfica Estilo GeoGebra */}
-        <div className="col-lg-6">
-          <div className="card shadow-sm border h-100">
-            <div className="card-header bg-dark text-white py-1 px-3 small fw-bold">
-              <i className="bi bi-graph-up me-2 text-warning"></i>Representación Gráfica
+          <div className="row g-3 mt-1">
+            <div className="col-md-6">
+              <div className="p-3 border rounded h-100 bg-white">
+                <h6 className="fw-bold text-secondary mb-2">Punto Fijo</h6>
+                <p className="small mb-0 text-muted">
+                  Mantiene una cantidad predeterminada y fija de cifras enteras y fraccionarias. 
+                  Limita severamente el rango dinámico y la resolución numérica.
+                </p>
+              </div>
             </div>
-            <div className="card-body p-1" style={{ minHeight: '340px' }}>
-              <Plot
-                data={generarDatosGrafica()}
-                layout={{
-                  autosize: true,
-                  margin: { l: 35, r: 15, t: 20, b: 35 },
-                  xaxis: { title: 'x', zeroline: true },
-                  yaxis: { title: 'f(x)', zeroline: true },
-                  legend: { orientation: 'h', y: -0.2 }
-                }}
-                useResizeHandler={true}
-                style={{ width: '100%', height: '100%' }}
-              />
+            <div className="col-md-6">
+              <div className="p-3 border rounded h-100 bg-white">
+                <h6 className="fw-bold text-primary mb-2">Punto Flotante</h6>
+                <p className="small mb-0 text-muted">
+                  Emplea una variante de la notación científica en base 2, desplazando el punto binario mediante un exponente 
+                  para representar tanto valores astronómicos como subatómicos con la misma cantidad de bits.
+                </p>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Tabla Estilo Excel */}
-        <div className="col-lg-6">
-          <div className="card shadow-sm border h-100">
-            <div className="card-header bg-dark text-white py-1 px-3 small fw-bold d-flex justify-content-between align-items-center">
-              <span><i className="bi bi-table me-2 text-info"></i>Tabla de Iteraciones</span>
-              {raizEncontrada && (
-                <span className="badge bg-success">
-                  Raíz ≈ {raizEncontrada}
-                </span>
-              )}
+      {/* 2. Estructura del Estándar IEEE 754 */}
+      <section className="card mb-4 shadow-sm">
+        <div className="card-header bg-white fw-bold text-dark">
+          2. Estructura del Estándar IEEE 754
+        </div>
+        <div className="card-body">
+          <p>
+            Todo número en punto flotante normalizado se representa matemáticamente bajo el modelo:
+          </p>
+          <div className="text-center py-2 px-3 mb-3 bg-light border rounded font-monospace fs-5">
+            x = (-1)<sup>s</sup> &times; (1.f)<sub>2</sub> &times; 2<sup>e - sesgo</sup>
+          </div>
+
+          <div className="row g-3 mb-3">
+            <div className="col-md-4">
+              <div className="p-3 border-start border-3 border-info bg-white rounded">
+                <div className="fw-bold text-info">Bit de signo (s)</div>
+                <small className="text-muted"><code>0</code> para positivo, <code>1</code> para negativo.</small>
+              </div>
             </div>
-            <div className="card-body p-0 table-responsive" style={{ maxHeight: '340px' }}>
-              <table className="table table-sm table-striped table-hover align-middle mb-0 font-monospace" style={{ fontSize: '0.8rem' }}>
-                <thead className="table-secondary sticky-top">
-                  <tr>
-                    <th className="ps-2">i</th>
-                    <th>a</th>
-                    <th>b</th>
-                    <th>c</th>
-                    <th>f(c)</th>
-                    <th>Error %</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filasTabla.map((row) => (
-                    <tr key={row.iter}>
-                      <td className="ps-2 fw-bold">{row.iter}</td>
-                      <td>{row.a}</td>
-                      <td>{row.b}</td>
-                      <td className="fw-bold text-primary">{row.c}</td>
-                      <td>{row.fc}</td>
-                      <td className="text-danger">{row.error}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="col-md-4">
+              <div className="p-3 border-start border-3 border-warning bg-white rounded">
+                <div className="fw-bold text-warning">Exponente sesgado (e)</div>
+                <small className="text-muted">Determina la magnitud. Usa un <em>sesgo (bias)</em> para manejar exponentes negativos sin requerir un bit de signo extra.</small>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="p-3 border-start border-3 border-success bg-white rounded">
+                <div className="fw-bold text-success">Mantisa o Significando (f)</div>
+                <small className="text-muted">Almacena la precisión fraccionaria. En números normalizados se asume un 1 implícito: <code>(1.f)</code>.</small>
+              </div>
+            </div>
+          </div>
+
+          <h6 className="fw-bold text-secondary mt-3">Comparativa de formatos estándar:</h6>
+          <div className="table-responsive">
+            <table className="table table-bordered table-hover align-middle mb-0 text-center">
+              <thead className="table-secondary small">
+                <tr>
+                  <th>Formato</th>
+                  <th>Bits Totales</th>
+                  <th>Signo (s)</th>
+                  <th>Exponente (e)</th>
+                  <th>Sesgo</th>
+                  <th>Mantisa (f)</th>
+                  <th>Dígitos decimales aprox.</th>
+                </tr>
+              </thead>
+              <tbody className="small">
+                <tr>
+                  <td className="fw-bold text-start">Precisión simple (<code>float32</code>)</td>
+                  <td>32</td>
+                  <td>1</td>
+                  <td>8</td>
+                  <td>127</td>
+                  <td>23 (+1 implícito)</td>
+                  <td>&asymp; 7</td>
+                </tr>
+                <tr>
+                  <td className="fw-bold text-start">Precisión doble (<code>float64</code> / Python float)</td>
+                  <td>64</td>
+                  <td>1</td>
+                  <td>11</td>
+                  <td>1023</td>
+                  <td>52 (+1 implícito)</td>
+                  <td>&asymp; 15 a 17</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Valores Especiales en IEEE 754 */}
+      <section className="card mb-4 shadow-sm">
+        <div className="card-header bg-white fw-bold text-dark">
+          3. Valores Especiales en IEEE 754
+        </div>
+        <div className="card-body">
+          <p className="card-text text-muted mb-3">
+            El estándar reserva configuraciones específicas de bits para representar estados numéricos singulares:
+          </p>
+          <div className="row g-2">
+            <div className="col-md-6">
+              <div className="p-2 border rounded bg-white">
+                <span className="badge bg-secondary me-2">Ceros</span>
+                <code>+0.0</code> y <code>-0.0</code> (exponente y mantisa en ceros).
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="p-2 border rounded bg-white">
+                <span className="badge bg-danger me-2">Infinitos (&plusmn;&infin;)</span>
+                Exponente al máximo y mantisa en ceros (por ejemplo <code>1.0 / 0.0</code> o desbordamiento).
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="p-2 border rounded bg-white">
+                <span className="badge bg-dark me-2">NaN (Not a Number)</span>
+                Exponente al máximo y mantisa &ne; 0 (indeterminaciones como <code>0.0 / 0.0</code> o &radic;(-1)).
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="p-2 border rounded bg-white">
+                <span className="badge bg-info text-dark me-2">Subnormales</span>
+                Exponente en ceros con mantisa no nula; decremento gradual hacia cero (<em>gradual underflow</em>).
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* 4. Épsilon de la Máquina */}
+      <section className="card mb-4 shadow-sm">
+        <div className="card-header bg-white fw-bold text-dark">
+          4. Concepto Clave: Épsilon de la Máquina (&epsilon;<sub>mach</sub>)
+        </div>
+        <div className="card-body">
+          <p>
+            El <strong>épsilon de la máquina</strong> representa la cota superior del error relativo por redondeo, 
+            equivalente a la distancia entre <code>1.0</code> y el siguiente número flotante inmediatamente representable:
+          </p>
+          <div className="text-center py-2 px-3 mb-3 bg-light border rounded font-monospace fs-5">
+            &epsilon;<sub>mach</sub> = 2<sup>-t</sup>
+          </div>
+          <div className="row g-3">
+            <div className="col-md-6">
+              <div className="alert alert-secondary mb-0">
+                <strong>Precisión simple (t = 23):</strong>
+                <div className="font-monospace mt-1">&epsilon;<sub>mach</sub> = 2<sup>-23</sup> &asymp; 1.19 &times; 10<sup>-7</sup></div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="alert alert-primary mb-0">
+                <strong>Precisión doble (t = 52):</strong>
+                <div className="font-monospace mt-1">&epsilon;<sub>mach</sub> = 2<sup>-52</sup> &asymp; 2.22 &times; 10<sup>-16</sup></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Limitaciones Críticas y Fenómenos Numéricos */}
+      <section className="card mb-4 shadow-sm">
+        <div className="card-header bg-white fw-bold text-dark">
+          5. Limitaciones Críticas y Fenómenos Numéricos
+        </div>
+        <div className="card-body">
+          <div className="accordion" id="accordionLimitaciones">
+            {/* A. Conversión */}
+            <div className="border rounded p-3 mb-3 bg-white">
+              <h6 className="fw-bold text-danger mb-2">A. Imprecisión en la conversión Decimal-Binario</h6>
+              <p className="small mb-2">
+                Fracciones simples en base 10 pueden ser periódicas infinitas en base 2:
+              </p>
+              <div className="font-monospace bg-light p-2 rounded mb-2 small">
+                0.1<sub>10</sub> = (0.0001100110011...)<sub>2</sub>
+              </div>
+              <p className="small text-muted mb-2">
+                En memoria no se almacena exactamente 0.1, sino una aproximación finita:
+              </p>
+              <pre className="bg-dark text-light p-2 rounded small mb-0">
+                <code>0.1 + 0.2 != 0.3  # En Python: 0.1 + 0.2 = 0.30000000000000004</code>
+              </pre>
+            </div>
+
+            {/* B. Overflow / Underflow */}
+            <div className="border rounded p-3 mb-3 bg-white">
+              <h6 className="fw-bold text-danger mb-2">B. Desbordamiento (Overflow y Underflow)</h6>
+              <ul className="small mb-0">
+                <li className="mb-1">
+                  <strong>Overflow:</strong> El resultado excede el límite superior representable (&asymp; 1.8 &times; 10<sup>308</sup> en float64), produciendo <code>&plusmn;&infin;</code>.
+                </li>
+                <li>
+                  <strong>Underflow:</strong> Un valor no nulo es inferior al mínimo representable (&asymp; 2.2 &times; 10<sup>-308</sup> en float64 normalizado), truncándose a <code>0.0</code>.
+                </li>
+              </ul>
+            </div>
+
+            {/* C. Cancelación Catastrófica */}
+            <div className="border rounded p-3 mb-3 bg-white">
+              <h6 className="fw-bold text-danger mb-2">C. Cancelación Catastrófica</h6>
+              <p className="small mb-0">
+                Ocurre al restar dos números casi iguales (<em>a &asymp; b</em>). Los dígitos más significativos se cancelan mutuamente, 
+                dejando que los bits menos significativos (afectados por ruido de redondeo) pasen a dominar el resultado final.
+              </p>
+            </div>
+
+            {/* D. Absorción */}
+            <div className="border rounded p-3 bg-white">
+              <h6 className="fw-bold text-danger mb-2">D. Absorción (Suma de magnitudes dispares)</h6>
+              <p className="small mb-2">
+                Al sumar un valor grande <em>x</em> con uno muy pequeño <em>y</em> tal que <code>|y| &lt; |x| &times; (&epsilon;<sub>mach</sub> / 2)</code>, el valor de <em>y</em> se pierde en el desplazamiento de mantisas:
+              </p>
+              <div className="font-monospace bg-light p-2 rounded text-center small">
+                x + y = x
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Reglas de Buena Práctica */}
+      <section className="card shadow-sm border-success">
+        <div className="card-header bg-success text-white fw-bold">
+          6. Reglas de Buena Práctica en Ingeniería
+        </div>
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-4">
+              <div className="p-3 border rounded h-100 bg-white">
+                <div className="fw-bold text-success mb-1">1. Evitar igualdad estricta</div>
+                <p className="small text-muted mb-0">
+                  Nunca comparar flotantes con <code>==</code>. Utilizar tolerancias:
+                  <br />
+                  <code>|a - b| &le; tol</code>
+                </p>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="p-3 border rounded h-100 bg-white">
+                <div className="fw-bold text-success mb-1">2. Reformulación algebraica</div>
+                <p className="small text-muted mb-0">
+                  Racionalizar expresiones propensas a cancelación o utilizar expansiones en series de Taylor para valores cercanos a cero.
+                </p>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="p-3 border rounded h-100 bg-white">
+                <div className="fw-bold text-success mb-1">3. Orden de acumulación</div>
+                <p className="small text-muted mb-0">
+                  En sumatorias o series, sumar preferentemente de menor a mayor magnitud para minimizar el efecto de absorción numérica.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default SimuladorTab;
+export default FundamentosTab;

@@ -1,134 +1,168 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState } from 'react';
 import Plot from 'react-plotly.js';
 import { evaluate } from 'mathjs';
 
 const SimuladorTab = () => {
-  // Parámetros de entrada
-  const [funcionStr, setFuncionStr] = useState('x^3 - 4*x - 9');
-  const [a, setA] = useState(2);
-  const [b, setB] = useState(3);
-  const [tol, setTol] = useState(0.0001);
-  const [maxIter, setMaxIter] = useState(20);
+  // Configuración de las funciones f(x) y g(x)
+  const [fStr, setFStr] = useState('exp(x)');
+  const [gStr, setGStr] = useState('1/x');
+  const [tolerancia, setTolerancia] = useState(0.01);
 
-  // Resultados
-  const [filasTabla, setFilasTabla] = useState([]);
-  const [raizEncontrada, setRaizEncontrada] = useState(null);
+  // Entrada de datos del alumno
+  const [xEntrada, setXEntrada] = useState('');
+
+  // Historial guardado
+  const [historial, setHistorial] = useState([]);
+
+  // Mensaje de error
   const [errorMensaje, setErrorMensaje] = useState('');
 
-  // Evaluación matemática de f(x)
-  const f = (xVal) => {
-    return evaluate(funcionStr, { x: xVal });
-  };
+  // Evaluación de funciones
+  const evalF = (xVal) => evaluate(fStr, { x: xVal });
+  const evalG = (xVal) => evaluate(gStr, { x: xVal });
 
-  const calcularBiseccion = () => {
+  // Agregar y guardar un nuevo intento en el historial
+  const agregarPaso = (e) => {
+    e?.preventDefault();
     setErrorMensaje('');
-    setFilasTabla([]);
-    setRaizEncontrada(null);
+
+    if (xEntrada === '' || isNaN(Number(xEntrada))) {
+      setErrorMensaje('Por favor, ingresa un número válido para x.');
+      return;
+    }
+
+    const xVal = parseFloat(xEntrada);
 
     try {
-      let fa = f(a);
-      let fb = f(b);
+      const yF = evalF(xVal);
+      const yG = evalG(xVal);
 
-      if (fa * fb >= 0) {
-        setErrorMensaje('Teorema de Bolzano no cumplido: f(a) y f(b) deben tener signos opuestos.');
+      if (!isFinite(yF) || !isFinite(yG)) {
+        setErrorMensaje('Una de las funciones no está definida en este punto (posible división entre cero o fuera del dominio).');
         return;
       }
 
-      let aCurr = parseFloat(a);
-      let bCurr = parseFloat(b);
-      let iter = 1;
-      let error = Math.abs(bCurr - aCurr);
-      const tabla = [];
-      let cPrev = null;
+      // Cálculo del error absoluto |f(x) - g(x)|
+      const errorAbsoluto = Math.abs(yF - yG);
+      const cumpleTolerancia = errorAbsoluto <= tolerancia;
 
-      while (iter <= maxIter && error > tol) {
-        let c = (aCurr + bCurr) / 2;
-        let fc = f(c);
+      const nuevoRegistro = {
+        paso: historial.length + 1,
+        x: xVal,
+        yF,
+        yG,
+        errorAbsoluto,
+        cumpleTolerancia
+      };
 
-        if (cPrev !== null) {
-          error = Math.abs((c - cPrev) / c) * 100;
-        } else {
-          error = Math.abs(bCurr - aCurr);
-        }
-
-        tabla.push({
-          iter,
-          a: aCurr.toFixed(6),
-          b: bCurr.toFixed(6),
-          c: c.toFixed(6),
-          fa: f(aCurr).toFixed(6),
-          fb: f(bCurr).toFixed(6),
-          fc: fc.toFixed(6),
-          error: error.toFixed(6)
-        });
-
-        if (Math.abs(fc) < 1e-12) break;
-
-        if (f(aCurr) * fc < 0) {
-          bCurr = c;
-        } else {
-          aCurr = c;
-        }
-
-        cPrev = c;
-        iter++;
-      }
-
-      setFilasTabla(tabla);
-      setRaizEncontrada(tabla[tabla.length - 1].c);
+      setHistorial([...historial, nuevoRegistro]);
+      setXEntrada('');
 
     } catch (err) {
-      setErrorMensaje('Sintaxis de la función no válida. Usa sintaxis estándar (ej: x^3 - 4*x - 9).');
+      setErrorMensaje('Error de sintaxis en la expresión de alguna de las funciones.');
     }
   };
 
-  useEffect(() => {
-    calcularBiseccion();
-  }, []);
+  // Reiniciar todos los datos
+  const reiniciarDatos = () => {
+    setHistorial([]);
+    setXEntrada('');
+    setErrorMensaje('');
+  };
 
+  // Generación de datos para Plotly
   const generarDatosGrafica = () => {
-    const xVals = [];
-    const yVals = [];
-    const minX = Math.min(a, b) - 2;
-    const maxX = Math.max(a, b) + 2;
-    const paso = (maxX - minX) / 100;
+    const xProbados = historial.map((h) => h.x);
+    let minX = xProbados.length > 0 ? Math.min(...xProbados) - 1.5 : 0.1;
+    let maxX = xProbados.length > 0 ? Math.max(...xProbados) + 1.5 : 3.0;
+
+    if (minX <= 0 && gStr.includes('1/x')) minX = 0.05;
+    if (minX >= maxX) maxX = minX + 2;
+
+    const nPuntos = 120;
+    const paso = (maxX - minX) / nPuntos;
+    const xCurva = [];
+    const yFCurva = [];
+    const yGCurva = [];
 
     for (let x = minX; x <= maxX; x += paso) {
-      xVals.push(x);
+      xCurva.push(x);
       try {
-        yVals.push(f(x));
+        const vf = evalF(x);
+        yFCurva.push(isFinite(vf) && Math.abs(vf) < 80 ? vf : null);
       } catch {
-        yVals.push(null);
+        yFCurva.push(null);
+      }
+
+      try {
+        const vg = evalG(x);
+        yGCurva.push(isFinite(vg) && Math.abs(vg) < 80 ? vg : null);
+      } catch {
+        yGCurva.push(null);
       }
     }
 
     const data = [
+      // Curva f(x)
       {
-        x: xVals,
-        y: yVals,
+        x: xCurva,
+        y: yFCurva,
         type: 'scatter',
         mode: 'lines',
-        name: `f(x) = ${funcionStr}`,
+        name: `f(x) = ${fStr}`,
         line: { color: '#0d6efd', width: 2.5 }
       },
+      // Curva g(x)
       {
-        x: [minX, maxX],
-        y: [0, 0],
+        x: xCurva,
+        y: yGCurva,
         type: 'scatter',
         mode: 'lines',
-        name: 'Eje X',
-        line: { color: '#6c757d', dash: 'dash' }
+        name: `g(x) = ${gStr}`,
+        line: { color: '#fd7e14', width: 2.5 }
       }
     ];
 
-    if (raizEncontrada !== null) {
+    if (historial.length > 0) {
+      // Líneas de error vertical entre f(x) y g(x)
+      historial.forEach((item) => {
+        data.push({
+          x: [item.x, item.x],
+          y: [item.yF, item.yG],
+          type: 'scatter',
+          mode: 'lines',
+          showlegend: false,
+          line: {
+            color: item.cumpleTolerancia ? '#198754' : '#adb5bd',
+            width: item.cumpleTolerancia ? 2.5 : 1.5,
+            dash: 'dot'
+          },
+          hoverinfo: 'none'
+        });
+      });
+
+      // Puntos evaluados en f(x)
       data.push({
-        x: [parseFloat(raizEncontrada)],
-        y: [0],
+        x: historial.map((h) => h.x),
+        y: historial.map((h) => h.yF),
         type: 'scatter',
-        mode: 'markers',
-        name: `Raíz ≈ ${raizEncontrada}`,
-        marker: { color: '#dc3545', size: 10, symbol: 'diamond' }
+        mode: 'markers+text',
+        name: 'f(x)',
+        text: historial.map((h) => `x_${h.paso}`),
+        textposition: 'top left',
+        marker: { color: '#0d6efd', size: 8, symbol: 'circle' }
+      });
+
+      // Puntos evaluados en g(x)
+      data.push({
+        x: historial.map((h) => h.x),
+        y: historial.map((h) => h.yG),
+        type: 'scatter',
+        mode: 'markers+text',
+        name: 'g(x)',
+        text: historial.map((h) => `x_${h.paso}`),
+        textposition: 'bottom right',
+        marker: { color: '#fd7e14', size: 8, symbol: 'square' }
       });
     }
 
@@ -137,94 +171,95 @@ const SimuladorTab = () => {
 
   return (
     <div className="p-3 border rounded bg-light">
-      {/* Encabezado Principal */}
+      {/* Encabezado */}
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <h5 className="text-primary fw-bold mb-1">
-            <i className="bi bi-calculator me-2"></i>Simulador del Método de Bisección
-          </h5>
-          <p className="text-muted small mb-0">
-            Ingresa la función $f(x)$ y los intervalos para calcular numéricamente la raíz con su gráfica y tabla de iteraciones.
-          </p>
-        </div>
+        <span className="h5 text-primary fw-bold align-middle mb-0">
+          <i className="bi bi-calculator me-2"></i>
+          Simulador
+        </span>
+        <button className="btn btn-outline-danger btn-sm" onClick={reiniciarDatos}>
+          <i className="bi bi-arrow-counterclockwise me-1"></i> Reiniciar Datos
+        </button>
       </div>
 
-      {/* Formulario de Parámetros */}
+      {/* Entradas */}
       <div className="row g-2 mb-3 p-3 bg-white rounded border shadow-sm">
-        <div className="col-md-4">
-          <label className="form-label small fw-bold mb-1">Función $f(x)$</label>
+        <div className="col-md-3">
+          <label className="form-label small fw-bold mb-1 text-primary">f(x)</label>
           <input
             type="text"
             className="form-control form-control-sm font-monospace"
-            value={funcionStr}
-            onChange={(e) => setFuncionStr(e.target.value)}
-            placeholder="x^3 - 4*x - 9"
+            value={fStr}
+            onChange={(e) => {
+              setFStr(e.target.value);
+              reiniciarDatos();
+            }}
+            placeholder="exp(x)"
           />
         </div>
-
-        <div className="col-md-2">
-          <label className="form-label small fw-bold mb-1">Límite $a$</label>
+        <div className="col-md-3">
+          <label className="form-label small fw-bold mb-1 text-warning">g(x)</label>
           <input
-            type="number"
-            step="any"
-            className="form-control form-control-sm"
-            value={a}
-            onChange={(e) => setA(parseFloat(e.target.value))}
+            type="text"
+            className="form-control form-control-sm font-monospace"
+            value={gStr}
+            onChange={(e) => {
+              setGStr(e.target.value);
+              reiniciarDatos();
+            }}
+            placeholder="1/x"
           />
         </div>
-
-        <div className="col-md-2">
-          <label className="form-label small fw-bold mb-1">Límite $b$</label>
-          <input
-            type="number"
-            step="any"
-            className="form-control form-control-sm"
-            value={b}
-            onChange={(e) => setB(parseFloat(e.target.value))}
-          />
-        </div>
-
         <div className="col-md-2">
           <label className="form-label small fw-bold mb-1">Tolerancia</label>
           <input
             type="number"
-            step="any"
+            step="0.001"
             className="form-control form-control-sm"
-            value={tol}
-            onChange={(e) => setTol(parseFloat(e.target.value))}
+            value={tolerancia}
+            onChange={(e) => setTolerancia(parseFloat(e.target.value) || 0.01)}
           />
         </div>
-
+        <div className="col-md-2">
+          <label className="form-label small fw-bold mb-1 text-success">
+            x
+          </label>
+          <input
+            type="number"
+            step="any"
+            className="form-control form-control-sm border-success fw-bold"
+            placeholder="Ej. 0.5"
+            value={xEntrada}
+            onChange={(e) => setXEntrada(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && agregarPaso(e)}
+          />
+        </div>
         <div className="col-md-2 d-flex align-items-end">
-          <button className="btn btn-success btn-sm w-100 fw-bold" onClick={calcularBiseccion}>
-            <i className="bi bi-play-fill me-1"></i> Calcular
+          <button className="btn btn-success btn-sm w-100 fw-bold" onClick={agregarPaso}>
+            <i className="bi bi-plus-lg me-1"></i> Guardar Paso
           </button>
         </div>
       </div>
 
-      {/* Mensaje de Error en sintaxis o intervalo */}
-      {errorMensaje && (
-        <div className="alert alert-danger py-2 small" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2"></i>{errorMensaje}
-        </div>
-      )}
+      {errorMensaje && <div className="alert alert-danger py-2 small mb-3">{errorMensaje}</div>}
 
-      {/* Panel Inferior: Gráfica + Tabla de Iteraciones */}
+      {/* Gráfica y Tabla */}
       <div className="row g-3">
-        {/* Gráfica Estilo GeoGebra */}
-        <div className="col-lg-6">
+        {/* Gráfica */}
+        <div className="col-lg-7">
           <div className="card shadow-sm border h-100">
-            <div className="card-header bg-dark text-white py-1 px-3 small fw-bold">
-              <i className="bi bi-graph-up me-2 text-warning"></i>Representación Gráfica
+            <div className="card-header bg-dark text-white py-1 px-3 small fw-bold d-flex justify-content-between align-items-center">
+              <span><i className="bi bi-graph-up me-2 text-warning"></i>Gráfica</span>
+              <span className="badge bg-secondary">{historial.length} puntos evaluados</span>
             </div>
             <div className="card-body p-1" style={{ minHeight: '340px' }}>
               <Plot
                 data={generarDatosGrafica()}
                 layout={{
                   autosize: true,
-                  margin: { l: 35, r: 15, t: 20, b: 35 },
-                  xaxis: { title: 'x', zeroline: true },
-                  yaxis: { title: 'f(x)', zeroline: true },
+                  margin: { l: 45, r: 20, t: 20, b: 40 },
+                  xaxis: { title: 'x' },
+                  yaxis: { title: 'y' },
                   legend: { orientation: 'h', y: -0.2 }
                 }}
                 useResizeHandler={true}
@@ -234,42 +269,47 @@ const SimuladorTab = () => {
           </div>
         </div>
 
-        {/* Tabla Estilo Excel */}
-        <div className="col-lg-6">
+        {/* Tabla */}
+        <div className="col-lg-5">
           <div className="card shadow-sm border h-100">
             <div className="card-header bg-dark text-white py-1 px-3 small fw-bold d-flex justify-content-between align-items-center">
-              <span><i className="bi bi-table me-2 text-info"></i>Tabla de Iteraciones</span>
-              {raizEncontrada && (
-                <span className="badge bg-success">
-                  Raíz ≈ {raizEncontrada}
-                </span>
-              )}
+              <span><i className="bi bi-table me-2 text-info"></i>Tabla</span>
             </div>
             <div className="card-body p-0 table-responsive" style={{ maxHeight: '340px' }}>
-              <table className="table table-sm table-striped table-hover align-middle mb-0 font-monospace" style={{ fontSize: '0.8rem' }}>
-                <thead className="table-secondary sticky-top">
-                  <tr>
-                    <th className="ps-2">i</th>
-                    <th>a</th>
-                    <th>b</th>
-                    <th>c</th>
-                    <th>f(c)</th>
-                    <th>Error %</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filasTabla.map((row) => (
-                    <tr key={row.iter}>
-                      <td className="ps-2 fw-bold">{row.iter}</td>
-                      <td>{row.a}</td>
-                      <td>{row.b}</td>
-                      <td className="fw-bold text-primary">{row.c}</td>
-                      <td>{row.fc}</td>
-                      <td className="text-danger">{row.error}</td>
+              {historial.length === 0 ? (
+                <div className="p-4 text-center text-muted small">
+                  <i className="bi bi-input-cursor-text display-6 d-block mb-2 text-secondary"></i>
+                  Ingresa un valor para <strong>x</strong> y presiona <strong>Guardar Paso</strong>.
+                </div>
+              ) : (
+                <table className="table table-sm table-striped table-hover align-middle mb-0 font-monospace text-center" style={{ fontSize: '0.82rem' }}>
+                  <thead className="table-secondary sticky-top">
+                    <tr>
+                      <th className="ps-2">#</th>
+                      <th>x</th>
+                      <th>f(x)</th>
+                      <th>g(x)</th>
+                      <th>Error Absoluto</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {historial.map((fila) => (
+                      <tr
+                        key={fila.paso}
+                        className={fila.cumpleTolerancia ? 'table-success fw-bold' : ''}
+                      >
+                        <td className="ps-2">{fila.paso}</td>
+                        <td className="text-primary fw-semibold">{fila.x.toFixed(4)}</td>
+                        <td>{fila.yF.toFixed(4)}</td>
+                        <td>{fila.yG.toFixed(4)}</td>
+                        <td className={fila.cumpleTolerancia ? 'text-success fw-bold' : 'text-danger'}>
+                          {fila.errorAbsoluto.toFixed(4)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
