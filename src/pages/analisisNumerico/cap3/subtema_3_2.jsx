@@ -13,7 +13,7 @@ export const Subtema3_2 = () => {
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
         <h4 className="mb-0">
-          3.2 Importancia de los métodos numéricos en Ingeniería
+          3.2 Métodos iterativos: Jacobi y Gauss-Seidel
         </h4>
       </Card.Header>
 
