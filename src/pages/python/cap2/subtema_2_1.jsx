@@ -3,9 +3,9 @@ import SubtemaLayout from '../../../components/SubtemaLayout';
 
 // Importaciones de los subcomponentes del Subtema 2.1
 import FundamentosTab from './subtema_2_1_components/FundamentosTab';
-import VideosTab from './subtema_2_1_components/VideosTab';
-import SimuladorTab from './subtema_2_1_components/SimuladorTab';
-import EjerciciosTab from './subtema_2_1_components/EjerciciosTab';
+//import VideosTab from './subtema_2_1_components/VideosTab';
+//import SimuladorTab from './subtema_2_1_components/SimuladorTab';
+//import EjerciciosTab from './subtema_2_1_components/EjerciciosTab';
 import CuestionarioTab from './subtema_2_1_components/CuestionarioTab';
 
 export const Subtema_2_1 = () => {
@@ -18,9 +18,9 @@ export const Subtema_2_1 = () => {
       }
       headerBg="dark"
       fundamentos={<FundamentosTab />}
-      videos={<VideosTab />}
-      simulador={<SimuladorTab />}
-      ejercicios={<EjerciciosTab />}
+      //videos={<VideosTab />}
+      //simulador={<SimuladorTab />}
+      //ejercicios={<EjerciciosTab />}
       cuestionario={<CuestionarioTab />}
     />
   );
