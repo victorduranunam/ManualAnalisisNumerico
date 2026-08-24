@@ -15,18 +15,21 @@ try {
     $pdo = new PDO("sqlite:" . $dbPath);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $semestreFiltro = $_GET['semestre'] ?? null;
-    $fechaFiltro = $_GET['fecha'] ?? null;
+    // Obtener filtros enviados por GET
+    $numeroCuenta = isset($_GET['numero_cuenta']) ? trim($_GET['numero_cuenta']) : '';
+    $fechaFiltro = isset($_GET['fecha']) ? trim($_GET['fecha']) : '';
 
     $sql = "SELECT id, numero_cuenta, codigo_python, salida_terminal, semestre, fecha_registro FROM participaciones WHERE 1=1";
     $params = [];
 
-    if ($semestreFiltro) {
-        $sql .= " AND semestre = :semestre";
-        $params[':semestre'] = $semestreFiltro;
+    // Aplicar filtro por número de cuenta
+    if (!empty($numeroCuenta) && $numeroCuenta !== 'TODOS') {
+        $sql .= " AND numero_cuenta = :cuenta";
+        $params[':cuenta'] = $numeroCuenta;
     }
 
-    if ($fechaFiltro) {
+    // Aplicar filtro por fecha (YYYY-MM-DD)
+    if (!empty($fechaFiltro)) {
         $sql .= " AND DATE(fecha_registro) = :fecha";
         $params[':fecha'] = $fechaFiltro;
     }
@@ -37,36 +40,51 @@ try {
     $stmt->execute($params);
     $participaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $nombreArchivo = "participaciones_UNAM_" . ($fechaFiltro ? "fecha_" . $fechaFiltro . "_" : "") . date('Y-m-d_H-i') . ".csv";
+    // Definir nombre dinámico del archivo
+    $partesNombre = [];
+    if (!empty($numeroCuenta) && $numeroCuenta !== 'TODOS') {
+        $partesNombre[] = "cuenta_" . $numeroCuenta;
+    }
+    if (!empty($fechaFiltro)) {
+        $partesNombre[] = "fecha_" . $fechaFiltro;
+    }
+    
+    $sufijo = !empty($partesNombre) ? implode("_", $partesNombre) : "todas";
+    $nombreArchivo = "participaciones_" . $sufijo . "_" . date('Ymd_His') . ".csv";
 
+    // Encabezados HTTP
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
     header('Pragma: no-cache');
     header('Expires: 0');
 
     $output = fopen('php://output', 'w');
+
+    // BOM de UTF-8 para Excel
     fprintf($output, "\xEF\xBB\xBF");
 
+    // Encabezados del CSV
     fputcsv($output, [
         'ID', 
         'Número de Cuenta', 
-        'Código Python Enviado', 
-        'Salida en Terminal', 
-        'Semestre Lectivo', 
-        'Fecha de Registro'
+        'Semestre', 
+        'Fecha de Registro', 
+        'Código Python', 
+        'Salida en Terminal'
     ]);
 
     foreach ($participaciones as $row) {
-        $codigoLimpio = str_replace(["\r\n", "\r", "\n"], " | ", $row['codigo_python']);
-        $salidaLimpia = str_replace(["\r\n", "\r", "\n"], " | ", $row['salida_terminal']);
+        // Normalizar saltos de línea a formato Unix (\n) para que Excel respete el formato de bloque de código
+        $codigoMultilinea = str_replace(["\r\n", "\r"], "\n", trim($row['codigo_python']));
+        $salidaMultilinea = str_replace(["\r\n", "\r"], "\n", trim($row['salida_terminal']));
 
         fputcsv($output, [
             $row['id'],
-            '="' . $row['numero_cuenta'] . '"',
-            $codigoLimpio,
-            $salidaLimpia,
+            '="' . $row['numero_cuenta'] . '"', // Mantiene el formato de texto para números de cuenta
             $row['semestre'],
-            $row['fecha_registro']
+            $row['fecha_registro'],
+            $codigoMultilinea,
+            $salidaMultilinea
         ]);
     }
 
