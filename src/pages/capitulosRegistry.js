@@ -20,7 +20,6 @@ import PyCap6Index from './python/cap6/Index';
 import PyCap7Index from './python/cap7/Index';
 import PyCap8Index from './python/cap8/Index';
 import PyCap9Index from './python/cap9/Index';
-import PyCap10Index from './python/cap10/Index';
 
 
 
@@ -41,7 +40,6 @@ export const vistasPersonalizadas = {
   'py_cap7': PyCap7Index,
   'py_cap8': PyCap8Index,
   'py_cap9': PyCap9Index,
-  'py_cap10': PyCap10Index,
 
 
 };

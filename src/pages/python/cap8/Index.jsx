@@ -5,19 +5,25 @@ import CapituloLayout from '../../../components/CapituloLayout';
 import Subtema8_1 from './subtema_8_1';
 import Subtema8_2 from './subtema_8_2';
 import Subtema8_3 from './subtema_8_3';
+import Subtema8_4 from './subtema_8_4';
+import Subtema8_5 from './subtema_8_5';
+import Subtema8_6 from './subtema_8_6';
 
 export const Index = ({ activeSection, onSelectSection }) => {
-  const subtemas = [
-    { id: 'py_8_1', title: '8.1 Introducción a Python y su uso en el Análisis Numérico' },
-    { id: 'py_8_2', title: '8.2 Principios del desarrollo de programas en Python' },
-    { id: 'py_8_3', title: '8.3 Aplicación en el Análisis Numérico' },
-  ];
+const subtemas = [
+  { id: 'py_8_1', title: '8.1 Incorporación e importación de Matplotlib' },
+  { id: 'py_8_2', title: '8.2 Gráfica básica con datos estáticos' },
+  { id: 'py_8_3', title: '8.3 Gráficas con datos dinámicos y funciones matemáticas' },
+  { id: 'py_8_4', title: '8.4 Personalización y formato de gráficos' },
+  { id: 'py_8_5', title: '8.5 Gráficas tridimensionales (3D)' },
+  { id: 'py_8_6', title: '8.6 Uso de la galería oficial de Matplotlib' },
+];
 
   return (
     <CapituloLayout
       materia="python"
       capNumero={8}
-      titulo="Fundamentos de Python"
+      titulo="Graficas"
       descripcion="Este primer módulo ofrece una visión general sobre la utilidad de Python como herramienta computacional en la ingeniería. A lo largo de la sección se muestra cómo la sencillez del lenguaje y sus librerías especializadas facilitan la aplicación del análisis numérico, convirtiéndolo en un entorno práctico para resolver ecuaciones, manipular matrices y graficar resultados."
       objetivos="Comprender los fundamentos del lenguaje Python, su filosofía y el ecosistema de librerías especializadas como herramienta computacional para el desarrollo y solución de algoritmos del análisis numérico."
       conocimientosPrevios="Lógica de programación básica o conocimientos elementales de computación."
@@ -28,6 +34,10 @@ export const Index = ({ activeSection, onSelectSection }) => {
       {activeSection === 'py_8_1' && <Subtema8_1 />}
       {activeSection === 'py_8_2' && <Subtema8_2 />}
       {activeSection === 'py_8_3' && <Subtema8_3 />}
+      {activeSection === 'py_8_4' && <Subtema8_4 />}
+      {activeSection === 'py_8_5' && <Subtema8_5 />}
+      {activeSection === 'py_8_6' && <Subtema8_6 />}
+    
     </CapituloLayout>
   );
 };

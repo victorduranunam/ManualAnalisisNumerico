@@ -17,7 +17,7 @@ export const Index = ({ activeSection, onSelectSection }) => {
     <CapituloLayout
       materia="python"
       capNumero={9}
-      titulo="Fundamentos de Python"
+      titulo="Biblioteca de operaciones y funciones auxiliares para el análisis numérico"
       descripcion="Este primer módulo ofrece una visión general sobre la utilidad de Python como herramienta computacional en la ingeniería. A lo largo de la sección se muestra cómo la sencillez del lenguaje y sus librerías especializadas facilitan la aplicación del análisis numérico, convirtiéndolo en un entorno práctico para resolver ecuaciones, manipular matrices y graficar resultados."
       objetivos="Comprender los fundamentos del lenguaje Python, su filosofía y el ecosistema de librerías especializadas como herramienta computacional para el desarrollo y solución de algoritmos del análisis numérico."
       conocimientosPrevios="Lógica de programación básica o conocimientos elementales de computación."

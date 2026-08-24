@@ -9,7 +9,6 @@ const buildSubtemas = (numero, prefix = 'Subtema') => [
   { id: `subtema_${numero}_7`, title: `${numero}.7 ${prefix} 7` },
   { id: `subtema_${numero}_8`, title: `${numero}.8 ${prefix} 8` },
   { id: `subtema_${numero}_9`, title: `${numero}.9 ${prefix} 9` },
-  { id: `subtema_${numero}_10`, title: `${numero}.10 ${prefix} 10` },
 
   
 ];
@@ -76,7 +75,7 @@ const buildPythonSubtemas = (capNumero) => [
   { id: `py_${capNumero}_7`, title: `Subtema ${capNumero}.7` },
   { id: `py_${capNumero}_8`, title: `Subtema ${capNumero}.8` },
   { id: `py_${capNumero}_9`, title: `Subtema ${capNumero}.9` },
-  { id: `py_${capNumero}_10`, title: `Subtema ${capNumero}.10` },
+ 
 ];
 
 // ARREGLO COMPLETO CON LOS 10 CAPÍTULOS DE PYTHON
@@ -85,7 +84,7 @@ export const pythonData = [
     id: 'py_cap1',
     numero: 1,
     title: 'Capítulo 1',
-    descripcion: 'Contenido del módulo 1 en desarrollo.',
+    descripcion: 'Introducción a Python y su uso en el Análisis Numérico',
     icon: 'bi-filetype-py',
     subtemas: buildPythonSubtemas(1)
   },
@@ -93,7 +92,7 @@ export const pythonData = [
     id: 'py_cap2',
     numero: 2,
     title: 'Capítulo 2',
-    descripcion: 'Contenido del módulo 2 en desarrollo.',
+    descripcion: 'Instalación y configuración del entorno de desarrollo',
     icon: 'bi-code-square',
     subtemas: buildPythonSubtemas(2)
   },
@@ -101,7 +100,7 @@ export const pythonData = [
     id: 'py_cap3',
     numero: 3,
     title: 'Capítulo 3',
-    descripcion: 'Contenido del módulo 3 en desarrollo.',
+    descripcion: 'Mi primer programa en Python',
     icon: 'bi-terminal',
     subtemas: buildPythonSubtemas(3)
   },
@@ -109,7 +108,7 @@ export const pythonData = [
     id: 'py_cap4',
     numero: 4,
     title: 'Capítulo 4',
-    descripcion: 'Contenido del módulo 4 en desarrollo.',
+    descripcion: 'Manejo de variables y estructuras de datos en Python',
     icon: 'bi-file-earmark-text',
     subtemas: buildPythonSubtemas(4)
   },
@@ -117,7 +116,7 @@ export const pythonData = [
     id: 'py_cap5',
     numero: 5,
     title: 'Capítulo 5',
-    descripcion: 'Contenido del módulo 5 en desarrollo.',
+    descripcion: 'Acceso y manipulación de arreglos y matrices en Python',
     icon: 'bi-people',
     subtemas: buildPythonSubtemas(5)
   },
@@ -125,7 +124,7 @@ export const pythonData = [
     id: 'py_cap6',
     numero: 6,
     title: 'Capítulo 6',
-    descripcion: 'Contenido del módulo 6 en desarrollo.',
+    descripcion: ' Estructuras de control',
     icon: 'bi-cpu',
     subtemas: buildPythonSubtemas(6)
   },
@@ -133,7 +132,7 @@ export const pythonData = [
     id: 'py_cap7',
     numero: 7,
     title: 'Capítulo 7',
-    descripcion: 'Contenido del módulo 7 en desarrollo.',
+    descripcion: 'Funciones',
     icon: 'bi-table',
     subtemas: buildPythonSubtemas(7)
   },
@@ -141,7 +140,7 @@ export const pythonData = [
     id: 'py_cap8',
     numero: 8,
     title: 'Capítulo 8',
-    descripcion: 'Contenido del módulo 8 en desarrollo.',
+    descripcion: 'Gráficas',
     icon: 'bi-bar-chart-line',
     subtemas: buildPythonSubtemas(8)
   },
@@ -149,16 +148,8 @@ export const pythonData = [
     id: 'py_cap9',
     numero: 9,
     title: 'Capítulo 9',
-    descripcion: 'Contenido del módulo 9 en desarrollo.',
+    descripcion: 'Biblioteca',
     icon: 'bi-robot',
     subtemas: buildPythonSubtemas(9)
-  },
-  {
-    id: 'py_cap10',
-    numero: 10,
-    title: 'Capítulo 10',
-    descripcion: 'Contenido del módulo 10 en desarrollo.',
-    icon: 'bi-check2-square',
-    subtemas: buildPythonSubtemas(10)
   }
 ];
