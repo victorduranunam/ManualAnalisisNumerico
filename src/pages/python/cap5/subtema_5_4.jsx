@@ -11,7 +11,7 @@ const Subtema_5_4 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">5.4 - Integración Numérica</h4>
+        <h4 className="mb-0">5.4 - Modificación de elementos en matrices</h4>
       </Card.Header>
 
       <Card.Body>

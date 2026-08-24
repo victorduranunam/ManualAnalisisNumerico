@@ -11,7 +11,7 @@ const Subtema_5_6 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">5.6 - Integración Numérica</h4>
+        <h4 className="mb-0">5.6 - Selección de rangos de datos (slicing)</h4>
       </Card.Header>
 
       <Card.Body>

@@ -11,7 +11,7 @@ const Subtema_6_2 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">6.2 - Ecuaciones Diferenciales</h4>
+        <h4 className="mb-0">6.2 - Estructura if</h4>
       </Card.Header>
 
       <Card.Body>

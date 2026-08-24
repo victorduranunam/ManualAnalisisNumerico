@@ -11,7 +11,7 @@ const Subtema_4_3 = () => {
   return (
     <Card className="shadow-sm border-0 mb-4">
       <Card.Header className="bg-primary text-white">
-        <h4 className="mb-0">4.3 - Interpolación y Ajuste</h4>
+        <h4 className="mb-0">4.3 - Números reales</h4>
       </Card.Header>
 
       <Card.Body>
