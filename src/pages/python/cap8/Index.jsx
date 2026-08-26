@@ -8,15 +8,18 @@ import Subtema8_3 from './subtema_8_3';
 import Subtema8_4 from './subtema_8_4';
 import Subtema8_5 from './subtema_8_5';
 import Subtema8_6 from './subtema_8_6';
+import Subtema8_7 from './subtema_8_7';
+
 
 export const Index = ({ activeSection, onSelectSection }) => {
 const subtemas = [
   { id: 'py_8_1', title: '8.1 Incorporación e importación de Matplotlib' },
   { id: 'py_8_2', title: '8.2 Gráfica básica con datos estáticos' },
-  { id: 'py_8_3', title: '8.3 Gráficas con datos dinámicos y funciones matemáticas' },
-  { id: 'py_8_4', title: '8.4 Personalización y formato de gráficos' },
-  { id: 'py_8_5', title: '8.5 Gráficas tridimensionales (3D)' },
-  { id: 'py_8_6', title: '8.6 Uso de la galería oficial de Matplotlib' },
+  { id: 'py_8_3', title: '8.3 Gráfica con Etiquetas de Ejes (Títulos y Subtítulos)' },
+  { id: 'py_8_4', title: '8.4 Gráficas con datos dinámicos y funciones matemáticas' },
+  { id: 'py_8_5', title: '8.5 Personalización y formato de gráficos' },
+  { id: 'py_8_6', title: '8.6 Gráficas tridimensionales (3D)' },
+  { id: 'py_8_7', title: '8.7 Uso de la galería oficial de Matplotlib' },
 ];
 
   return (
@@ -37,6 +40,7 @@ const subtemas = [
       {activeSection === 'py_8_4' && <Subtema8_4 />}
       {activeSection === 'py_8_5' && <Subtema8_5 />}
       {activeSection === 'py_8_6' && <Subtema8_6 />}
+      {activeSection === 'py_8_7' && <Subtema8_7 />}
     
     </CapituloLayout>
   );

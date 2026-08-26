@@ -3,10 +3,10 @@
 const Fundamentos8_5 = () => (
   <div className="p-3 border rounded bg-light">
     <h5 className="text-primary fw-bold mb-2">
-      8.5 Gráficas Tridimensionales (3D)
+      8.4 Personalización y Formato de Gráficos
     </h5>
     <p className="text-secondary mb-3">
-      Visualización de superficies $z = f(x, y)$ para problemas de optimización multivariable y campos bidimensionales.
+      Incorporación de elementos indispensables en ingeniería: títulos, etiquetas en los ejes, cuadrícula, referencia en el origen ($y = 0$) y cuadros de leyendas.
     </p>
 
     <div className="mb-3">
@@ -15,32 +15,32 @@ const Fundamentos8_5 = () => (
         <code>{`import matplotlib.pyplot as plt
 import numpy as np
 
-# 1. Creación de la malla (X, Y)
-x = np.linspace(-3, 3, 50)
-y = np.linspace(-3, 3, 50)
-X, Y = np.meshgrid(x, y)
+# 1. Curva continua de la función
+x = np.linspace(0, 4, 150)
+y = x**3 - 4*x - 2
 
-# 2. Evaluación de la superficie Z
-Z = np.sin(np.sqrt(X**2 + Y**2))
+# 2. Puntos discretos de iteraciones (ej. Bisección o Newton)
+x_iter = [1.0, 2.5, 2.2, 2.214]
+y_iter = [val**3 - 4*val - 2 for val in x_iter]
 
-# 3. Figura con proyección 3D
-fig = plt.figure(figsize=(8, 6))
-ax = fig.add_subplot(111, projection='3d')
+# 3. Trazado con estilos
+plt.plot(x, y, color='blue', linestyle='-', linewidth=2, label='f(x) = x³ - 4x - 2')
+plt.scatter(x_iter, y_iter, color='red', marker='o', s=50, label='Iteraciones')
 
-# 4. Superficie con escala de color
-superficie = ax.plot_surface(X, Y, Z, cmap='viridis', edgecolor='none')
-ax.set_title("Superficie 3D: z = sin(sqrt(x² + y²))")
-ax.set_xlabel("Eje X")
-ax.set_ylabel("Eje Y")
-ax.set_zlabel("Eje Z")
-fig.colorbar(superficie, shrink=0.5, aspect=10)
+# 4. Formato y referencias
+plt.axhline(0, color='black', linestyle='--', linewidth=1) # Eje y = 0
+plt.title("Localización de Raíces de una Función", fontsize=13)
+plt.xlabel("Variable independiente (x)")
+plt.ylabel("f(x)")
+plt.grid(True, linestyle=':', alpha=0.6)
+plt.legend(loc='upper left')
 
 plt.show()`}</code>
       </pre>
     </div>
 
     <div className="alert alert-info py-2 px-3 mb-0 small">
-      <strong>Nota práctica:</strong> Se requiere <code>projection='3d'</code> en el eje y <code>np.meshgrid()</code> para construir la cuadrícula de puntos en el plano $XY$.
+      <strong>Nota práctica:</strong> <code>plt.axhline(0)</code> es fundamental en métodos de raíces para identificar cruces por cero. <code>plt.legend()</code> requiere que cada trazo cuente con su parámetro <code>label</code>.
     </div>
   </div>
 );
