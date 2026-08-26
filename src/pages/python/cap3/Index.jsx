@@ -10,7 +10,6 @@ import Subtema3_5 from './subtema_3_5';
 import Subtema3_6 from './subtema_3_6';
 import Subtema3_7 from './subtema_3_7';
 import Subtema3_8 from './subtema_3_8';
-import Subtema3_9 from './subtema_3_9';
 
 export const Index = ({ activeSection, onSelectSection }) => {
   const subtemas = [
@@ -22,7 +21,6 @@ export const Index = ({ activeSection, onSelectSection }) => {
     { id: 'py_3_6', title: '3.6 Transformación de grados a radianes' },
     { id: 'py_3_7', title: '3.7 Presentación de resultados' },
     { id: 'py_3_8', title: '3.8 Formateo de resultados' },
-    { id: 'py_3_9', title: '3.9 Ejemplo completo' },
   ];
 
   return (
@@ -45,7 +43,6 @@ export const Index = ({ activeSection, onSelectSection }) => {
       {activeSection === 'py_3_6' && <Subtema3_6 />}
       {activeSection === 'py_3_7' && <Subtema3_7 />}
       {activeSection === 'py_3_8' && <Subtema3_8 />}
-      {activeSection === 'py_3_9' && <Subtema3_9 />}
     </CapituloLayout>
   );
 };
