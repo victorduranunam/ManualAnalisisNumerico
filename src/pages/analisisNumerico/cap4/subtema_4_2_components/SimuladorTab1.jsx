@@ -3,107 +3,60 @@ import React, { useMemo, useState } from "react";
 
 // ======================================================
 // SIMULADOR DE DIFERENCIAS FINITAS
+// Progresivas, regresivas y centrales
 // ======================================================
 
 const SimuladorTab = () => {
-  // ======================================================
+  // ------------------------------------------------------
   // 1. DATOS DE ENTRADA
-  // ======================================================
-
-  // Función inicial
-  const [functionInput, setFunctionInput] = useState("sin(x)");
-
-  // Número de puntos: 5 por defecto
+  // ------------------------------------------------------
+  const [functionInput, setFunctionInput] = useState("Math.sin(x)");
   const [numPoints, setNumPoints] = useState(5);
-
-  // Intervalo inicial
   const [intervalStart, setIntervalStart] = useState(0);
   const [intervalEnd, setIntervalEnd] = useState(1);
 
-  // ======================================================
-  // 2. EVALUAR LA FUNCIÓN
-  // ======================================================
-
+  // ------------------------------------------------------
+  // 2. EVALUACIÓN DE LA FUNCIÓN
+  // ------------------------------------------------------
   const evaluateFunction = (x) => {
     try {
-      let expression = functionInput.trim();
+      // Se permiten algunas funciones matemáticas comunes
+      const expression = functionInput
+        .replace(/\^/g, "**")
+        .replace(/\bsin\b/g, "Math.sin")
+        .replace(/\bcos\b/g, "Math.cos")
+        .replace(/\btan\b/g, "Math.tan")
+        .replace(/\bln\b/g, "Math.log")
+        .replace(/\blog\b/g, "Math.log10")
+        .replace(/\bsqrt\b/g, "Math.sqrt")
+        .replace(/\bexp\b/g, "Math.exp")
+        .replace(/\babs\b/g, "Math.abs");
 
-      if (!expression) {
-        return NaN;
-      }
-
-      // ----------------------------------------------
-      // Potencias
-      // Ejemplo:
-      // x^2  -> x**2
-      // ----------------------------------------------
-      expression = expression.replace(/\^/g, "**");
-
-      // ----------------------------------------------
-      // Funciones matemáticas
-      // ----------------------------------------------
-      expression = expression.replace(/\bsin\s*\(/g, "Math.sin(");
-      expression = expression.replace(/\bcos\s*\(/g, "Math.cos(");
-      expression = expression.replace(/\btan\s*\(/g, "Math.tan(");
-
-      expression = expression.replace(/\bln\s*\(/g, "Math.log(");
-      expression = expression.replace(/\blog\s*\(/g, "Math.log10(");
-
-      expression = expression.replace(/\bsqrt\s*\(/g, "Math.sqrt(");
-      expression = expression.replace(/\bexp\s*\(/g, "Math.exp(");
-      expression = expression.replace(/\babs\s*\(/g, "Math.abs(");
-
-      // ----------------------------------------------
-      // Constantes matemáticas
-      // ----------------------------------------------
-      expression = expression.replace(/\bpi\b/gi, "Math.PI");
-      expression = expression.replace(/\be\b/g, "Math.E");
-
-      // ----------------------------------------------
-      // Crear función
-      // ----------------------------------------------
       // eslint-disable-next-line no-new-func
       const fn = new Function("x", `return ${expression};`);
 
       const result = fn(x);
 
-      if (!Number.isFinite(result)) {
-        return NaN;
-      }
-
-      return result;
+      return Number.isFinite(result) ? result : NaN;
     } catch {
       return NaN;
     }
   };
 
-  // ======================================================
+  // ------------------------------------------------------
   // 3. GENERACIÓN DE PUNTOS Y TABLAS
-  // ======================================================
-
+  // ------------------------------------------------------
   const calculation = useMemo(() => {
     const n = Number(numPoints);
     const a = Number(intervalStart);
     const b = Number(intervalEnd);
 
-    // ----------------------------------------------
-    // Validar número de puntos
-    // ----------------------------------------------
     if (!Number.isInteger(n) || n < 3) {
       return {
         error: "Se requieren al menos 3 puntos.",
       };
     }
 
-    if (n > 15) {
-      return {
-        error: "El número máximo permitido es de 15 puntos.",
-      };
-    }
-
-    // ----------------------------------------------
-    // Validar intervalo
-    // ----------------------------------------------
     if (!Number.isFinite(a) || !Number.isFinite(b)) {
       return {
         error: "Los extremos del intervalo deben ser numéricos.",
@@ -112,19 +65,15 @@ const SimuladorTab = () => {
 
     if (a >= b) {
       return {
-        error:
-          "El extremo inicial del intervalo debe ser menor que el extremo final.",
+        error: "El extremo inicial debe ser menor que el extremo final.",
       };
     }
 
-    // ----------------------------------------------
-    // Calcular h
-    // ----------------------------------------------
     const h = (b - a) / (n - 1);
 
-    // ----------------------------------------------
-    // Generar puntos
-    // ----------------------------------------------
+    // --------------------------------------------
+    // Generar puntos x_i y y_i = f(x_i)
+    // --------------------------------------------
     const points = [];
 
     for (let i = 0; i < n; i++) {
@@ -138,30 +87,25 @@ const SimuladorTab = () => {
       });
     }
 
-    // ----------------------------------------------
-    // Validar función
-    // ----------------------------------------------
-    if (points.some((point) => !Number.isFinite(point.y))) {
+    if (points.some((p) => !Number.isFinite(p.y))) {
       return {
         error:
-          "No se pudo evaluar la función. Verifica la expresión ingresada.",
+          "La función no pudo evaluarse correctamente. Verifica la expresión ingresada.",
       };
     }
 
     // ==================================================
-    // 4. DIFERENCIAS PROGRESIVAS
+    // TABLA DE DIFERENCIAS PROGRESIVAS
     // ==================================================
 
     const forward = Array.from({ length: n }, () =>
       Array(n).fill(null)
     );
 
-    // Primera columna: f(x)
     for (let i = 0; i < n; i++) {
       forward[i][0] = points[i].y;
     }
 
-    // Diferencias progresivas
     for (let order = 1; order < n; order++) {
       for (let i = 0; i < n - order; i++) {
         forward[i][order] =
@@ -171,19 +115,17 @@ const SimuladorTab = () => {
     }
 
     // ==================================================
-    // 5. DIFERENCIAS REGRESIVAS
+    // TABLA DE DIFERENCIAS REGRESIVAS
     // ==================================================
 
     const backward = Array.from({ length: n }, () =>
       Array(n).fill(null)
     );
 
-    // Primera columna: f(x)
     for (let i = 0; i < n; i++) {
       backward[i][0] = points[i].y;
     }
 
-    // Diferencias regresivas
     for (let order = 1; order < n; order++) {
       for (let i = order; i < n; i++) {
         backward[i][order] =
@@ -193,23 +135,27 @@ const SimuladorTab = () => {
     }
 
     // ==================================================
-    // 6. DIFERENCIAS CENTRALES
+    // TABLA DE DIFERENCIAS CENTRALES
+    // ==================================================
+    //
+    // Para cada punto se calculan diferencias centrales
+    // cuando los puntos necesarios existen.
+    //
+    // C[i][k] representa una diferencia central de orden k.
     // ==================================================
 
     const central = Array.from({ length: n }, () =>
       Array(n).fill(null)
     );
 
-    // Primera columna
     for (let i = 0; i < n; i++) {
       central[i][0] = points[i].y;
     }
 
-    // Diferencias centrales
-    //
-    // Se construye la tabla de diferencias y se
-    // presentan alrededor de la zona central.
-    //
+    // Calculamos las diferencias de forma recursiva.
+    // Se utilizan los valores de la tabla progresiva
+    // para mostrar los órdenes disponibles alrededor
+    // de cada punto.
     for (let order = 1; order < n; order++) {
       for (let i = 0; i < n - order; i++) {
         central[i][order] =
@@ -231,22 +177,20 @@ const SimuladorTab = () => {
     };
   }, [functionInput, numPoints, intervalStart, intervalEnd]);
 
-  // ======================================================
-  // 7. CAMBIAR NÚMERO DE PUNTOS
-  // ======================================================
+  // ------------------------------------------------------
+  // 4. CAMBIAR NÚMERO DE PUNTOS
+  // ------------------------------------------------------
+  const handleNumPointsChange = (value) => {
+    const parsed = Number(value);
 
-  const handleNumPointsChange = (event) => {
-    const value = Number(event.target.value);
-
-    if (value >= 3 && value <= 15) {
-      setNumPoints(value);
+    if (Number.isInteger(parsed) && parsed >= 3 && parsed <= 15) {
+      setNumPoints(parsed);
     }
   };
 
-  // ======================================================
-  // 8. FORMATEAR VALORES
-  // ======================================================
-
+  // ------------------------------------------------------
+  // 5. FUNCIÓN PARA MOSTRAR VALORES
+  // ------------------------------------------------------
   const formatValue = (value) => {
     if (value === null || value === undefined) {
       return "—";
@@ -259,17 +203,15 @@ const SimuladorTab = () => {
     return value.toFixed(6);
   };
 
-  // ======================================================
-  // 9. RENDER
-  // ======================================================
-
+  // ------------------------------------------------------
+  // 6. RENDER
+  // ------------------------------------------------------
   return (
     <div className="p-3 border rounded bg-light">
 
       {/* ==================================================
           ENCABEZADO
           ================================================== */}
-
       <div className="mb-3 pb-2 border-bottom">
         <h5 className="text-primary fw-bold mb-1">
           <span className="me-2">📊</span>
@@ -283,9 +225,8 @@ const SimuladorTab = () => {
       </div>
 
       {/* ==================================================
-          CONFIGURACIÓN
+          DATOS DE LA FUNCIÓN
           ================================================== */}
-
       <div className="card border shadow-sm mb-3">
 
         <div className="card-header bg-white">
@@ -298,12 +239,8 @@ const SimuladorTab = () => {
 
           <div className="row g-3">
 
-            {/* --------------------------------------------
-                FUNCIÓN
-                -------------------------------------------- */}
-
+            {/* FUNCIÓN */}
             <div className="col-12 col-lg-5">
-
               <label className="form-label small fw-bold">
                 Función f(x)
               </label>
@@ -312,29 +249,18 @@ const SimuladorTab = () => {
                 type="text"
                 className="form-control font-monospace"
                 value={functionInput}
-                onChange={(event) =>
-                  setFunctionInput(event.target.value)
-                }
-                placeholder="Ejemplo: sin(x)"
+                onChange={(e) => setFunctionInput(e.target.value)}
               />
 
               <div className="form-text">
-                Ejemplos:{" "}
-                <code>sin(x)</code>,{" "}
-                <code>cos(x)</code>,{" "}
-                <code>x^2</code>,{" "}
-                <code>ln(x)</code>,{" "}
-                <code>sqrt(x)</code>
+                Ejemplos: <code>Math.sin(x)</code>,{" "}
+                <code>x^2 + 2*x + 1</code>,{" "}
+                <code>Math.log(x)</code>
               </div>
-
             </div>
 
-            {/* --------------------------------------------
-                NÚMERO DE PUNTOS
-                -------------------------------------------- */}
-
+            {/* NÚMERO DE PUNTOS */}
             <div className="col-6 col-lg-2">
-
               <label className="form-label small fw-bold">
                 Número de puntos
               </label>
@@ -345,21 +271,18 @@ const SimuladorTab = () => {
                 max="15"
                 className="form-control"
                 value={numPoints}
-                onChange={handleNumPointsChange}
+                onChange={(e) =>
+                  handleNumPointsChange(e.target.value)
+                }
               />
 
               <div className="form-text">
                 Por defecto: 5
               </div>
-
             </div>
 
-            {/* --------------------------------------------
-                INICIO DEL INTERVALO
-                -------------------------------------------- */}
-
+            {/* INTERVALO INICIAL */}
             <div className="col-6 col-lg-2">
-
               <label className="form-label small fw-bold">
                 Inicio a
               </label>
@@ -369,19 +292,14 @@ const SimuladorTab = () => {
                 step="any"
                 className="form-control"
                 value={intervalStart}
-                onChange={(event) =>
-                  setIntervalStart(event.target.value)
+                onChange={(e) =>
+                  setIntervalStart(e.target.value)
                 }
               />
-
             </div>
 
-            {/* --------------------------------------------
-                FINAL DEL INTERVALO
-                -------------------------------------------- */}
-
+            {/* INTERVALO FINAL */}
             <div className="col-6 col-lg-2">
-
               <label className="form-label small fw-bold">
                 Final b
               </label>
@@ -391,118 +309,82 @@ const SimuladorTab = () => {
                 step="any"
                 className="form-control"
                 value={intervalEnd}
-                onChange={(event) =>
-                  setIntervalEnd(event.target.value)
+                onChange={(e) =>
+                  setIntervalEnd(e.target.value)
                 }
               />
-
             </div>
 
-            {/* --------------------------------------------
-                h
-                -------------------------------------------- */}
-
+            {/* h */}
             <div className="col-6 col-lg-1">
-
               <label className="form-label small fw-bold">
                 h
               </label>
 
               <div className="form-control bg-light text-center font-monospace">
-
                 {calculation.error
                   ? "—"
                   : calculation.h.toFixed(6)}
-
               </div>
-
             </div>
 
           </div>
-
         </div>
       </div>
 
       {/* ==================================================
           RESUMEN
           ================================================== */}
-
       {!calculation.error && (
-
         <div className="card border shadow-sm mb-3">
 
           <div className="card-body py-2">
 
             <div className="row text-center">
 
-              {/* FUNCIÓN */}
-
               <div className="col-md-3">
-
                 <small className="text-muted d-block">
                   Función
                 </small>
-
                 <strong className="font-monospace text-primary">
                   f(x) = {functionInput}
                 </strong>
-
               </div>
 
-              {/* PUNTOS */}
-
               <div className="col-md-2">
-
                 <small className="text-muted d-block">
                   Puntos utilizados
                 </small>
-
                 <strong>
                   {calculation.n}
                 </strong>
-
               </div>
 
-              {/* INTERVALO */}
-
               <div className="col-md-2">
-
                 <small className="text-muted d-block">
                   Intervalo
                 </small>
-
                 <strong className="font-monospace">
                   [{calculation.a}, {calculation.b}]
                 </strong>
-
               </div>
 
-              {/* h */}
-
               <div className="col-md-2">
-
                 <small className="text-muted d-block">
                   Paso h
                 </small>
-
                 <strong className="font-monospace">
                   {calculation.h.toFixed(6)}
                 </strong>
-
               </div>
 
-              {/* DISTRIBUCIÓN */}
-
               <div className="col-md-3">
-
                 <small className="text-muted d-block">
                   Distribución
                 </small>
-
                 <span className="badge bg-success">
                   Espaciado uniforme
                 </span>
-
               </div>
 
             </div>
@@ -514,54 +396,39 @@ const SimuladorTab = () => {
       {/* ==================================================
           ERROR
           ================================================== */}
-
       {calculation.error && (
-
         <div className="alert alert-danger small">
-
           <strong>⚠️ Error:</strong>{" "}
-
           {calculation.error}
-
         </div>
       )}
 
       {/* ==================================================
           TABLA DE PUNTOS
           ================================================== */}
-
       {!calculation.error && (
-
         <div className="card border shadow-sm mb-3">
 
           <div className="card-header bg-white">
-
             <span className="fw-bold text-dark">
               📋 Puntos utilizados
             </span>
-
           </div>
 
           <div className="table-responsive">
-
             <table className="table table-sm table-bordered text-center mb-0">
 
               <thead className="table-light">
-
                 <tr>
                   <th>i</th>
                   <th>xᵢ</th>
                   <th>f(xᵢ)</th>
                 </tr>
-
               </thead>
 
               <tbody className="font-monospace">
-
                 {calculation.points.map((point) => (
-
                   <tr key={point.i}>
-
                     <td className="fw-bold">
                       {point.i}
                     </td>
@@ -573,35 +440,26 @@ const SimuladorTab = () => {
                     <td>
                       {point.y.toFixed(6)}
                     </td>
-
                   </tr>
-
                 ))}
-
               </tbody>
 
             </table>
-
           </div>
 
         </div>
       )}
 
       {/* ==================================================
-          CARD 1
           DIFERENCIAS PROGRESIVAS
           ================================================== */}
-
       {!calculation.error && (
-
         <div className="card border shadow-sm mb-3">
 
           <div className="card-header bg-primary text-white">
-
             <span className="fw-bold">
               ➡️ Diferencias Finitas Progresivas
             </span>
-
           </div>
 
           <div className="table-responsive p-2">
@@ -609,9 +467,7 @@ const SimuladorTab = () => {
             <table className="table table-sm table-bordered text-center mb-0">
 
               <thead className="table-light">
-
                 <tr>
-
                   <th>i</th>
                   <th>xᵢ</th>
                   <th>f(xᵢ)</th>
@@ -619,27 +475,20 @@ const SimuladorTab = () => {
                   {Array.from({
                     length: calculation.n - 1,
                   }).map((_, order) => (
-
                     <th key={order}>
-
                       Δ
                       {order + 1 === 1
                         ? ""
                         : `^${order + 1}`}{" "}
                       fᵢ
-
                     </th>
-
                   ))}
-
                 </tr>
-
               </thead>
 
               <tbody className="font-monospace">
 
                 {calculation.points.map((point, i) => (
-
                   <tr key={i}>
 
                     <td className="fw-bold">
@@ -664,7 +513,6 @@ const SimuladorTab = () => {
                         ];
 
                       return (
-
                         <td
                           key={order}
                           className={
@@ -675,13 +523,10 @@ const SimuladorTab = () => {
                         >
                           {formatValue(value)}
                         </td>
-
                       );
-
                     })}
 
                   </tr>
-
                 ))}
 
               </tbody>
@@ -691,30 +536,26 @@ const SimuladorTab = () => {
           </div>
 
           <div className="card-footer bg-light small text-muted">
-
-            <strong>Definición:</strong>{" "}
-            Δfᵢ = fᵢ₊₁ − fᵢ
-
+            Se calculan las diferencias utilizando
+            valores posteriores de la tabla:
+            <strong className="ms-1">
+              Δfᵢ = fᵢ₊₁ − fᵢ
+            </strong>
           </div>
 
         </div>
       )}
 
       {/* ==================================================
-          CARD 2
           DIFERENCIAS REGRESIVAS
           ================================================== */}
-
       {!calculation.error && (
-
         <div className="card border shadow-sm mb-3">
 
           <div className="card-header bg-success text-white">
-
             <span className="fw-bold">
               ⬅️ Diferencias Finitas Regresivas
             </span>
-
           </div>
 
           <div className="table-responsive p-2">
@@ -722,9 +563,7 @@ const SimuladorTab = () => {
             <table className="table table-sm table-bordered text-center mb-0">
 
               <thead className="table-light">
-
                 <tr>
-
                   <th>i</th>
                   <th>xᵢ</th>
                   <th>f(xᵢ)</th>
@@ -732,27 +571,20 @@ const SimuladorTab = () => {
                   {Array.from({
                     length: calculation.n - 1,
                   }).map((_, order) => (
-
                     <th key={order}>
-
                       ∇
                       {order + 1 === 1
                         ? ""
                         : `^${order + 1}`}{" "}
                       fᵢ
-
                     </th>
-
                   ))}
-
                 </tr>
-
               </thead>
 
               <tbody className="font-monospace">
 
                 {calculation.points.map((point, i) => (
-
                   <tr key={i}>
 
                     <td className="fw-bold">
@@ -777,7 +609,6 @@ const SimuladorTab = () => {
                         ];
 
                       return (
-
                         <td
                           key={order}
                           className={
@@ -788,13 +619,10 @@ const SimuladorTab = () => {
                         >
                           {formatValue(value)}
                         </td>
-
                       );
-
                     })}
 
                   </tr>
-
                 ))}
 
               </tbody>
@@ -804,30 +632,26 @@ const SimuladorTab = () => {
           </div>
 
           <div className="card-footer bg-light small text-muted">
-
-            <strong>Definición:</strong>{" "}
-            ∇fᵢ = fᵢ − fᵢ₋₁
-
+            Se calculan las diferencias utilizando
+            valores anteriores de la tabla:
+            <strong className="ms-1">
+              ∇fᵢ = fᵢ − fᵢ₋₁
+            </strong>
           </div>
 
         </div>
       )}
 
       {/* ==================================================
-          CARD 3
           DIFERENCIAS CENTRALES
           ================================================== */}
-
       {!calculation.error && (
-
         <div className="card border shadow-sm mb-3">
 
           <div className="card-header bg-warning">
-
             <span className="fw-bold text-dark">
               ↔️ Diferencias Finitas Centrales
             </span>
-
           </div>
 
           <div className="table-responsive p-2">
@@ -835,9 +659,7 @@ const SimuladorTab = () => {
             <table className="table table-sm table-bordered text-center mb-0">
 
               <thead className="table-light">
-
                 <tr>
-
                   <th>i</th>
                   <th>xᵢ</th>
                   <th>f(xᵢ)</th>
@@ -845,27 +667,20 @@ const SimuladorTab = () => {
                   {Array.from({
                     length: calculation.n - 1,
                   }).map((_, order) => (
-
                     <th key={order}>
-
                       Δ
                       {order + 1 === 1
                         ? ""
                         : `^${order + 1}`}{" "}
                       central
-
                     </th>
-
                   ))}
-
                 </tr>
-
               </thead>
 
               <tbody className="font-monospace">
 
                 {calculation.points.map((point, i) => (
-
                   <tr key={i}>
 
                     <td className="fw-bold">
@@ -890,7 +705,6 @@ const SimuladorTab = () => {
                         ];
 
                       return (
-
                         <td
                           key={order}
                           className={
@@ -901,13 +715,10 @@ const SimuladorTab = () => {
                         >
                           {formatValue(value)}
                         </td>
-
                       );
-
                     })}
 
                   </tr>
-
                 ))}
 
               </tbody>
@@ -917,12 +728,9 @@ const SimuladorTab = () => {
           </div>
 
           <div className="card-footer bg-light small text-muted">
-
-            <strong>Nota:</strong>{" "}
-            Las diferencias centrales se emplean
+            Las diferencias centrales se utilizan
             alrededor de un punto de referencia,
-            utilizando valores a ambos lados.
-
+            aprovechando valores a ambos lados.
           </div>
 
         </div>
@@ -931,47 +739,35 @@ const SimuladorTab = () => {
       {/* ==================================================
           INFORMACIÓN DIDÁCTICA
           ================================================== */}
-
       {!calculation.error && (
-
         <div className="alert alert-info small mb-0">
 
-          <strong>💡 Información del cálculo</strong>
+          <strong>💡 Información:</strong>
 
-          <ul className="mb-0 mt-2">
+          <ul className="mb-0 mt-1">
 
             <li>
-              Se utilizan{" "}
-              <strong>
-                {calculation.n} puntos
-              </strong>
-              .
+              El número de puntos actual es{" "}
+              <strong>{calculation.n}</strong>.
             </li>
 
             <li>
-              El intervalo es{" "}
+              El intervalo utilizado es{" "}
               <strong>
                 [{calculation.a}, {calculation.b}]
-              </strong>
-              .
+              </strong>.
             </li>
 
             <li>
               El tamaño del paso es{" "}
               <strong>
                 h = {calculation.h.toFixed(6)}
-              </strong>
-              .
+              </strong>.
             </li>
 
             <li>
               Los puntos se generan automáticamente
-              a partir de la función f(x).
-            </li>
-
-            <li>
-              Las tres tablas utilizan el mismo
-              conjunto de puntos y el mismo valor de h.
+              a partir de la función ingresada.
             </li>
 
           </ul>
@@ -984,4 +780,3 @@ const SimuladorTab = () => {
 };
 
 export default SimuladorTab;
-
